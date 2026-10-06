@@ -26,6 +26,7 @@ class Trip(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     start_date: Mapped[date] = mapped_column(Date, nullable=False)
     end_date: Mapped[date] = mapped_column(Date, nullable=False)
     budget_tier: Mapped[str] = mapped_column(String(10), default="medium")  # low|medium|luxury
+    purpose: Mapped[str] = mapped_column(String(20), default="tourism")  # tourism|umrah|hajj
     travelers: Mapped[int] = mapped_column(Integer, default=1)
     status: Mapped[str] = mapped_column(String(20), default="draft")  # draft|planned
     title: Mapped[str] = mapped_column(String(160), default="")

@@ -8,6 +8,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 BudgetTier = Literal["low", "medium", "luxury"]
+TripPurpose = Literal["tourism", "umrah", "hajj"]
 
 
 class FlightOffer(BaseModel):
@@ -62,6 +63,7 @@ class TripCreate(BaseModel):
     start_date: date
     end_date: date
     budget_tier: BudgetTier = "medium"
+    purpose: TripPurpose = "tourism"
     travelers: int = Field(default=1, ge=1, le=20)
     title: str = Field(default="", max_length=160)
 
@@ -92,6 +94,7 @@ class TripOut(BaseModel):
     start_date: date
     end_date: date
     budget_tier: str
+    purpose: str = "tourism"
     travelers: int
     status: str
     created_at: datetime
@@ -127,6 +130,7 @@ class RequiredDocument(BaseModel):
 class TravelRequirements(BaseModel):
     destination_country: str
     destination_iso2: str
+    purpose: str = "tourism"
     passport_validity_months: int
     visa: VisaInfo | None = None
     required_documents: list[RequiredDocument] = []

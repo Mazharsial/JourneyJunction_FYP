@@ -65,10 +65,13 @@ class CountryRequirement(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     """
 
     __tablename__ = "country_requirements"
-
-    destination_iso2: Mapped[str] = mapped_column(
-        String(2), unique=True, nullable=False, index=True
+    __table_args__ = (
+        UniqueConstraint("destination_iso2", "purpose", name="uq_country_req_dest_purpose"),
     )
+
+    destination_iso2: Mapped[str] = mapped_column(String(2), nullable=False, index=True)
+    # tourism | umrah | hajj — lets one country carry pilgrimage-specific rules
+    purpose: Mapped[str] = mapped_column(String(20), default="tourism", nullable=False)
     passport_validity_months: Mapped[int] = mapped_column(default=6)
     # list[str] — each entry is a required document the traveller must carry
     required_documents: Mapped[list] = mapped_column(JSON, default=list)

@@ -31,6 +31,8 @@ from app.services.providers.mock import MockFlightProvider, MockHotelProvider
 
 logger = get_logger("travel")
 _VALID_TIERS = {"low", "medium", "luxury"}
+_VALID_PURPOSES = {"tourism", "umrah", "hajj"}
+_PURPOSE_LABEL = {"tourism": "Trip", "umrah": "Umrah", "hajj": "Hajj"}
 
 
 async def _currency_for_city(session: AsyncSession, city: City) -> str:
@@ -79,6 +81,8 @@ async def search_hotels(*, city_name, city_iata, checkin, checkout, budget_tier,
 def _validate(data: TripCreate) -> None:
     if data.budget_tier not in _VALID_TIERS:
         raise AppError("Invalid budget tier.", code="invalid_budget", status_code=422)
+    if data.purpose not in _VALID_PURPOSES:
+        raise AppError("Invalid trip purpose.", code="invalid_purpose", status_code=422)
     if data.end_date < data.start_date:
         raise AppError("End date must be on or after the start date.", code="invalid_dates", status_code=422)
     if data.start_date < date.today():
@@ -94,7 +98,18 @@ async def create_trip(session: AsyncSession, user_id: uuid.UUID, data: TripCreat
         raise AppError("Destination city not found.", code="city_not_found", status_code=404)
     if data.origin_city_id and not await location_service.get_city(session, data.origin_city_id):
         raise AppError("Origin city not found.", code="city_not_found", status_code=404)
+    # Umrah / Hajj are only valid for Saudi destinations.
+    if data.purpose in ("umrah", "hajj") and dest.country_iso2 != "SA":
+        raise AppError(
+            "Umrah and Hajj trips must have a destination in Saudi Arabia "
+            "(e.g. Makkah, Madinah or Jeddah).",
+            code="invalid_pilgrimage_destination", status_code=422,
+        )
 
+    default_title = (
+        f"{_PURPOSE_LABEL[data.purpose]} to {dest.name}"
+        if data.purpose != "tourism" else f"Trip to {dest.name}"
+    )
     trip = Trip(
         user_id=user_id,
         destination_city_id=data.destination_city_id,
@@ -102,8 +117,9 @@ async def create_trip(session: AsyncSession, user_id: uuid.UUID, data: TripCreat
         start_date=data.start_date,
         end_date=data.end_date,
         budget_tier=data.budget_tier,
+        purpose=data.purpose,
         travelers=data.travelers,
-        title=data.title or f"Trip to {dest.name}",
+        title=data.title or default_title,
         status="draft",
         items=[],  # initialise collection so async access needs no lazy load
     )
@@ -160,6 +176,7 @@ async def to_trip_out(session: AsyncSession, trip: Trip) -> TripOut:
         start_date=trip.start_date,
         end_date=trip.end_date,
         budget_tier=trip.budget_tier,
+        purpose=trip.purpose,
         travelers=trip.travelers,
         status=trip.status,
         created_at=trip.created_at,
@@ -211,7 +228,9 @@ async def build_requirements(
     """Assemble destination travel requirements + a document compliance check."""
     if not dest:
         return None
-    req = await location_service.get_country_requirement(session, dest.country_iso2)
+    req = await location_service.get_country_requirement(
+        session, dest.country_iso2, trip.purpose
+    )
     if not req:
         return None
     country = await location_service.get_country(session, dest.country_iso2)
@@ -236,6 +255,7 @@ async def build_requirements(
     return TravelRequirements(
         destination_country=country.name if country else dest.country_iso2,
         destination_iso2=dest.country_iso2,
+        purpose=trip.purpose,
         passport_validity_months=req.passport_validity_months,
         visa=visa,
         required_documents=documents,

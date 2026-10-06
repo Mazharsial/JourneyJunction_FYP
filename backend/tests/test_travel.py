@@ -150,6 +150,51 @@ async def test_trip_detail_includes_travel_requirements(client):
     assert passport["status"] == "not_verified"
 
 
+async def test_saudi_cities_available(client):
+    cities = (await client.get("/api/v1/locations/cities?country=SA")).json()
+    names = [c["name"] for c in cities]
+    assert {"Makkah", "Madinah", "Jeddah"}.issubset(set(names))
+    assert all(c["country_iso2"] == "SA" for c in cities)
+
+
+async def test_umrah_trip_has_pilgrimage_requirements(client):
+    token = await _token(client, "umrah@example.com")
+    makkah = await _city_id(client, "Makkah", "SA")
+    karachi = await _city_id(client, "Karachi", "PK")
+    created = await client.post(
+        "/api/v1/trips",
+        headers=auth_header(token),
+        json={"destination_city_id": makkah, "origin_city_id": karachi,
+              "start_date": START, "end_date": END, "purpose": "umrah"},
+    )
+    assert created.status_code == 201, created.text
+    assert created.json()["purpose"] == "umrah"
+    assert created.json()["title"] == "Umrah to Makkah"
+
+    d = (await client.get(f"/api/v1/trips/{created.json()['id']}", headers=auth_header(token))).json()
+    req = d["requirements"]
+    assert req["purpose"] == "umrah"
+    assert req["destination_country"] == "Saudi Arabia"
+    assert "nusuk" in req["official_source"].lower()
+    # Mandatory meningococcal vaccination is the defining pilgrimage health rule.
+    assert any("meningococcal" in h.lower() for h in req["health"])
+    labels = " ".join(x["label"].lower() for x in req["required_documents"])
+    assert "nusuk" in labels or "umrah visa" in labels
+
+
+async def test_pilgrimage_requires_saudi_destination(client):
+    token = await _token(client, "badpilgrim@example.com")
+    dubai = await _city_id(client, "Dubai", "AE")
+    r = await client.post(
+        "/api/v1/trips",
+        headers=auth_header(token),
+        json={"destination_city_id": dubai, "start_date": START, "end_date": END,
+              "purpose": "hajj"},
+    )
+    assert r.status_code == 422
+    assert r.json()["error"]["code"] == "invalid_pilgrimage_destination"
+
+
 async def test_trip_is_idor_safe(client):
     a_token = await _token(client, "owner@example.com")
     dest = await _city_id(client, "Dubai", "AE")

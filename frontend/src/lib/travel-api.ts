@@ -53,6 +53,7 @@ export interface TripOut {
   start_date: string;
   end_date: string;
   budget_tier: string;
+  purpose: string;
   travelers: number;
   status: string;
   created_at: string;
@@ -77,6 +78,7 @@ export interface RequiredDocument {
 export interface TravelRequirements {
   destination_country: string;
   destination_iso2: string;
+  purpose: string;
   passport_validity_months: number;
   visa: VisaInfo | null;
   required_documents: RequiredDocument[];
@@ -104,6 +106,7 @@ export interface TripCreate {
   start_date: string;
   end_date: string;
   budget_tier: string;
+  purpose?: string;
   travelers: number;
   title?: string;
 }

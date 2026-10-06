@@ -78,6 +78,11 @@ function RequirementsSection({ req }: { req: TravelRequirements }) {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-lg font-semibold text-foreground">
           Travel requirements for {req.destination_country}
+          {req.purpose && req.purpose !== "tourism" && (
+            <span className="ml-2 rounded-full bg-ai/10 px-2 py-0.5 text-xs font-semibold uppercase text-ai">
+              {req.purpose}
+            </span>
+          )}
         </h2>
         {req.documents_required > 0 && (
           <span
@@ -195,7 +200,14 @@ export default function TripDetailPage() {
     <div className="space-y-8">
       <div>
         <Link href="/dashboard/trips" className="text-sm text-brand-blue hover:underline">← My trips</Link>
-        <h1 className="mt-2 text-2xl font-bold text-foreground">{trip.title}</h1>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <h1 className="text-2xl font-bold text-foreground">{trip.title}</h1>
+          {trip.purpose && trip.purpose !== "tourism" && (
+            <span className="rounded-full bg-ai/10 px-2.5 py-1 text-xs font-semibold uppercase text-ai">
+              {trip.purpose}
+            </span>
+          )}
+        </div>
         <p className="mt-1 text-sm text-muted">
           {trip.origin ? `${trip.origin.name} → ` : ""}{trip.destination.name} · {trip.start_date} → {trip.end_date} ·{" "}
           <span className="capitalize">{trip.budget_tier}</span> · {trip.travelers} traveler{trip.travelers > 1 ? "s" : ""}

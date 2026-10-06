@@ -25,6 +25,7 @@ export default function PlanTripPage() {
   const [start, setStart] = useState(plusDays(14));
   const [end, setEnd] = useState(plusDays(18));
   const [budget, setBudget] = useState("medium");
+  const [purpose, setPurpose] = useState("tourism");
   const [travelers, setTravelers] = useState(1);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -40,10 +41,33 @@ export default function PlanTripPage() {
       .catch(() => setError("Could not load cities. Is the API running?"));
   }, []);
 
+  const isPilgrimage = purpose === "umrah" || purpose === "hajj";
+
+  // Umrah/Hajj can only go to Saudi Arabia, so restrict the destination list.
+  const destCities = useMemo(
+    () => (isPilgrimage ? cities.filter((c) => c.country_iso2 === "SA") : cities),
+    [cities, isPilgrimage],
+  );
+  const destOptions = useMemo(
+    () => destCities.map((c) => ({ value: c.id, label: `${c.name} (${c.iata_code}) · ${c.country_iso2}` })),
+    [destCities],
+  );
   const cityOptions = useMemo(
     () => cities.map((c) => ({ value: c.id, label: `${c.name} (${c.iata_code}) · ${c.country_iso2}` })),
     [cities],
   );
+
+  // When switching to/from a pilgrimage, keep the destination valid.
+  function onPurposeChange(next: string) {
+    setPurpose(next);
+    if (next === "umrah" || next === "hajj") {
+      const makkah = cities.find((c) => c.name === "Makkah");
+      if (makkah) setDestination(makkah.id);
+    } else {
+      const dubai = cities.find((c) => c.name === "Dubai");
+      if (dubai) setDestination(dubai.id);
+    }
+  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -61,6 +85,7 @@ export default function PlanTripPage() {
           start_date: start,
           end_date: end,
           budget_tier: budget,
+          purpose,
           travelers,
         }),
       );
@@ -82,8 +107,25 @@ export default function PlanTripPage() {
       <form onSubmit={onSubmit} className="mt-6 space-y-5 rounded-2xl border border-border bg-surface p-6">
         {error && <Alert tone="error">{error}</Alert>}
         <Select
+          label="Trip purpose"
+          options={[
+            { value: "tourism", label: "Tourism" },
+            { value: "umrah", label: "Umrah (pilgrimage)" },
+            { value: "hajj", label: "Hajj (pilgrimage)" },
+          ]}
+          value={purpose}
+          onChange={(e) => onPurposeChange(e.target.value)}
+        />
+        {isPilgrimage && (
+          <Alert tone="info">
+            {purpose === "umrah" ? "Umrah" : "Hajj"} trips go to Saudi Arabia (Makkah, Madinah or
+            Jeddah). You&apos;ll see pilgrimage-specific requirements — Nusuk visa, mandatory
+            vaccinations and more — on the trip page.
+          </Alert>
+        )}
+        <Select
           label="Destination"
-          options={cityOptions}
+          options={destOptions}
           placeholder="Choose a city"
           value={destination}
           onChange={(e) => setDestination(e.target.value)}

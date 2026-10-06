@@ -20,17 +20,22 @@ from app.models.location import (
 CURRENCIES = [
     ("AED", "UAE Dirham", "د.إ"),
     ("PKR", "Pakistani Rupee", "₨"),
+    ("SAR", "Saudi Riyal", "﷼"),
     ("USD", "US Dollar", "$"),  # retained for billing / plan pricing display
 ]
 
-# Supported markets: Pakistan (home) and the UAE (the single international
-# destination). Seeded as data, not hardcoded in application logic.
+# Supported markets: Pakistan (home) plus the UAE and Saudi Arabia (the
+# international destinations — Saudi also covers Umrah & Hajj pilgrimage).
+# Seeded as data, not hardcoded in application logic.
 COUNTRIES = [
     ("PK", "Pakistan", "PKR", "+92"),
     ("AE", "United Arab Emirates", "AED", "+971"),
+    ("SA", "Saudi Arabia", "SAR", "+966"),
 ]
 
 # (country_iso2, name, iata, timezone, lat, lon)
+# Makkah has no airport of its own — pilgrims fly into Jeddah (JED), so it
+# carries the JED gateway code so flight search still works.
 CITIES = [
     # Pakistan cities
     ("PK", "Karachi", "KHI", "Asia/Karachi", 24.8607, 67.0011),
@@ -41,10 +46,16 @@ CITIES = [
     ("PK", "Faisalabad", "LYP", "Asia/Karachi", 31.4504, 73.1350),
     ("PK", "Multan", "MUX", "Asia/Karachi", 30.1575, 71.5249),
     ("PK", "Sialkot", "SKT", "Asia/Karachi", 32.4945, 74.5229),
-    # UAE — the only out-of-country destination
+    # UAE
     ("AE", "Dubai", "DXB", "Asia/Dubai", 25.2048, 55.2708),
     ("AE", "Abu Dhabi", "AUH", "Asia/Dubai", 24.4539, 54.3773),
     ("AE", "Sharjah", "SHJ", "Asia/Dubai", 25.3463, 55.4209),
+    # Saudi Arabia (incl. the holy cities for Umrah & Hajj)
+    ("SA", "Jeddah", "JED", "Asia/Riyadh", 21.4858, 39.1925),
+    ("SA", "Makkah", "JED", "Asia/Riyadh", 21.3891, 39.8579),
+    ("SA", "Madinah", "MED", "Asia/Riyadh", 24.5247, 39.5692),
+    ("SA", "Riyadh", "RUH", "Asia/Riyadh", 24.7136, 46.6753),
+    ("SA", "Dammam", "DMM", "Asia/Riyadh", 26.3927, 49.9777),
 ]
 
 # (origin, destination, requirement, allowed_stay_days, notes)
@@ -52,14 +63,20 @@ _SRC = "Demo data — always verify with official government sources."
 VISA_RULES = [
     ("PK", "AE", "visa_required", 30, "Apply for a UAE tourist visa before travelling."),
     ("AE", "PK", "visa_required", 30, "Apply for a Pakistan visa before travelling."),
+    ("PK", "SA", "visa_required", 90, "Apply via the Nusuk / Saudi eVisa platform before travelling."),
+    ("AE", "SA", "visa_required", 90, "Apply via the Nusuk / Saudi eVisa platform before travelling."),
+    ("SA", "PK", "visa_required", 30, "Apply for a Pakistan visa before travelling."),
 ]
 
 # Destination entry / travel requirements (informational, demo data).
-# Keyed by destination ISO2. required_documents drives the compliance check,
-# so phrase them so a keyword (passport / visa / ticket / id) is detectable.
+# Keyed by (destination ISO2, purpose). purpose defaults to "tourism"; Saudi
+# Arabia also carries "umrah" and "hajj" variants with pilgrimage-specific
+# rules. required_documents drives the compliance check, so phrase them so a
+# keyword (passport / visa / ticket / id) is detectable.
 COUNTRY_REQUIREMENTS = [
     {
         "destination_iso2": "AE",
+        "purpose": "tourism",
         "passport_validity_months": 6,
         "required_documents": [
             "Passport valid for at least 6 months beyond arrival",
@@ -89,6 +106,7 @@ COUNTRY_REQUIREMENTS = [
     },
     {
         "destination_iso2": "PK",
+        "purpose": "tourism",
         "passport_validity_months": 6,
         "required_documents": [
             "Passport valid for at least 6 months beyond arrival",
@@ -114,6 +132,108 @@ COUNTRY_REQUIREMENTS = [
         ),
         "emergency_number": "15 (police) · 1122 (rescue/ambulance)",
         "official_source": "https://visa.nadra.gov.pk",
+    },
+    # ----- Saudi Arabia: general tourism -----
+    {
+        "destination_iso2": "SA",
+        "purpose": "tourism",
+        "passport_validity_months": 6,
+        "required_documents": [
+            "Passport valid for at least 6 months beyond arrival",
+            "Saudi tourist eVisa (apply via the Nusuk / Visit Saudi platform)",
+            "Return or onward flight ticket",
+            "Confirmed hotel booking",
+            "Proof of sufficient funds for the stay",
+        ],
+        "health": [
+            "No mandatory vaccinations for general tourism for most travellers.",
+            "A polio certificate may be required when arriving from affected countries.",
+        ],
+        "currency_notes": (
+            "Local currency is the Saudi Riyal (SAR). Cash, or equivalent, above "
+            "SAR 60,000 (about USD 16,000) must be declared on arrival."
+        ),
+        "customs_notes": (
+            "Alcohol, pork products, narcotics and material offensive to Islam are "
+            "strictly prohibited. Respect local dress and conduct codes."
+        ),
+        "entry_notes": (
+            "Complete immigration formalities and fingerprint/biometric capture on "
+            "arrival. Keep your hotel address and return ticket accessible."
+        ),
+        "emergency_number": "999 (police) · 997 (ambulance) · 998 (civil defence)",
+        "official_source": "https://www.visitsaudi.com/en/do-saudi/visa-information",
+    },
+    # ----- Saudi Arabia: Umrah -----
+    {
+        "destination_iso2": "SA",
+        "purpose": "umrah",
+        "passport_validity_months": 6,
+        "required_documents": [
+            "Passport valid for at least 6 months beyond arrival",
+            "Umrah visa or tourist eVisa issued through the Nusuk platform",
+            "Return or onward flight ticket with confirmed dates",
+            "Confirmed Makkah / Madinah hotel booking",
+            "Meningococcal (ACWY) vaccination certificate",
+        ],
+        "health": [
+            "Meningococcal meningitis (ACWY) vaccination is MANDATORY — certificate "
+            "issued at least 10 days before arrival and valid for the trip.",
+            "Seasonal influenza and COVID-19 vaccination are recommended.",
+            "A polio certificate is required for arrivals from polio-affected countries.",
+        ],
+        "currency_notes": (
+            "Carry Saudi Riyal (SAR) for local expenses; cards are widely accepted. "
+            "Declare cash, or equivalent, above SAR 60,000 on arrival."
+        ),
+        "customs_notes": (
+            "Carry Ihram clothing. Zamzam water is provided at the airport on departure "
+            "(do not pack it in checked baggage from the city). Alcohol and narcotics are "
+            "strictly prohibited."
+        ),
+        "entry_notes": (
+            "Book your Umrah permit and prayer/Rawdah slots through the Nusuk app. "
+            "Umrah can be performed year-round except during the Hajj season. Women may "
+            "travel without a mahram under current rules — verify before booking."
+        ),
+        "emergency_number": "999 (police) · 997 (ambulance) · 911 (in Makkah/Madinah)",
+        "official_source": "https://www.nusuk.sa",
+    },
+    # ----- Saudi Arabia: Hajj -----
+    {
+        "destination_iso2": "SA",
+        "purpose": "hajj",
+        "passport_validity_months": 6,
+        "required_documents": [
+            "Passport valid for at least 6 months beyond arrival",
+            "Hajj visa issued through an approved operator or the Nusuk platform",
+            "Return flight ticket within the permitted Hajj travel window",
+            "Confirmed Hajj package (Makkah, Mina, Arafat, Muzdalifah accommodation)",
+            "Meningococcal (ACWY) vaccination certificate",
+        ],
+        "health": [
+            "Meningococcal meningitis (ACWY) vaccination is MANDATORY — certificate "
+            "issued at least 10 days before arrival.",
+            "Seasonal influenza and COVID-19 vaccination are strongly recommended.",
+            "A polio certificate is required for arrivals from polio-affected countries "
+            "(including Pakistan) — carry proof of OPV.",
+        ],
+        "currency_notes": (
+            "Carry Saudi Riyal (SAR) for local expenses and sacrifice (Hady) payment. "
+            "Declare cash, or equivalent, above SAR 60,000 on arrival."
+        ),
+        "customs_notes": (
+            "Carry Ihram clothing. Alcohol, narcotics and prohibited items are strictly "
+            "banned. Follow your group's schedule for Mina, Arafat and Muzdalifah."
+        ),
+        "entry_notes": (
+            "Hajj is performed once a year in Dhul-Hijjah and requires an official Hajj "
+            "visa and package — a tourist or Umrah visa is NOT valid for Hajj. Book only "
+            "through a licensed operator or the Nusuk Hajj platform. A wristband/ID is "
+            "issued on arrival; keep it on at all times."
+        ),
+        "emergency_number": "999 (police) · 997 (ambulance) · 911 (in Makkah/Madinah)",
+        "official_source": "https://www.nusuk.sa",
     },
 ]
 
@@ -152,11 +272,11 @@ async def seed_locations(session: AsyncSession) -> None:
             )
 
     existing_req = {
-        r.destination_iso2
+        (r.destination_iso2, r.purpose)
         for r in (await session.scalars(select(CountryRequirement))).all()
     }
     for req in COUNTRY_REQUIREMENTS:
-        if req["destination_iso2"] not in existing_req:
+        if (req["destination_iso2"], req.get("purpose", "tourism")) not in existing_req:
             session.add(CountryRequirement(**req))
 
     if not await session.scalar(select(AppConfig).where(AppConfig.key == "default_market")):

@@ -55,11 +55,23 @@ async def get_country(session: AsyncSession, iso2: str) -> Country | None:
 
 
 async def get_country_requirement(
-    session: AsyncSession, destination_iso2: str
+    session: AsyncSession, destination_iso2: str, purpose: str = "tourism"
 ) -> CountryRequirement | None:
+    """Requirements for a destination and trip purpose, falling back to the
+    country's general (tourism) requirements when no purpose-specific row exists."""
+    iso2 = destination_iso2.upper()
+    row = await session.scalar(
+        select(CountryRequirement).where(
+            CountryRequirement.destination_iso2 == iso2,
+            CountryRequirement.purpose == purpose,
+        )
+    )
+    if row or purpose == "tourism":
+        return row
     return await session.scalar(
         select(CountryRequirement).where(
-            CountryRequirement.destination_iso2 == destination_iso2.upper()
+            CountryRequirement.destination_iso2 == iso2,
+            CountryRequirement.purpose == "tourism",
         )
     )
 
