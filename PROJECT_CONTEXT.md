@@ -8,14 +8,14 @@
 
 ## CURRENT PROJECT STATE
 ```
-Current Phase:      Phase 5 — Core travel (BACKEND COMPLETE; frontend planner next)
-Current Feature:    Locations/visa config + flight/hotel search (mock+Amadeus) + trips + itinerary
-Last Completed:     Phase 5 backend: locations, travel providers, trips (IDOR-safe), itinerary; 29 tests passing; migration 0002 renders valid PG DDL
-Last Successful Test: backend 29/29 pytest; migration offline SQL OK
-Last Git Commit:    (pending Phase 5 backend commit; Phase 4b = c4d0833 pushed)
+Current Phase:      Phase 5 — Core travel (COMPLETE: backend + planner UI)
+Current Feature:    Trip planner (create/list/detail) + locations/visa + flight/hotel search
+Last Completed:     Phase 5 frontend planner; live HTTP smoke of full flow (create trip Lahore->Dubai luxury -> 5-day itinerary, 4 flights business, 4 hotels, visa); frontend builds (11 routes)
+Last Successful Test: backend 29/29 pytest + live HTTP smoke; frontend `npm run build` passed
+Last Git Commit:    (pending Phase 5 frontend commit; Phase 5 backend = 4aa7802 pushed)
 Current Branch:     main (develop to be created)
-Next Task:          Phase 5 frontend — trip planner UI (create trip, trips list, trip detail) consuming the travel API
-Blocked By:         Nothing. Amadeus live data optional (AMADEUS_CLIENT_ID/SECRET) — mock fallback works without it.
+Next Task:          Phase 6 — AI chatbot (Gemini) + evaluation (needs GEMINI_API_KEY; mock fallback until provided)
+Blocked By:         Nothing. Amadeus live data optional (mock fallback works). Gemini key needed for live AI in P6.
 Supervisor doc:     docs/VoynixAI_Project_Documentation.docx (FYP SRS/design report; open in Word and press F9 to populate the Table of Contents).
 Required Credentials (upcoming): Amadeus (P5), Gemini (P6), Stripe (P9), Meta WhatsApp + Klaviyo (P8)
 Known Issues:       npm reported transitive high-severity advisories (to review in P11 hardening)
@@ -88,9 +88,8 @@ Phase 1  System Architecture         [IN PROGRESS] (docs/ARCHITECTURE.md, DATABA
 Phase 2  Design System & UI shell    [IN PROGRESS] (tokens + brand + landing page done)
 Phase 3  Project Foundation          [COMPLETE]  (backend+frontend+docker+CI+docs; tests green)
 Phase 4  Authentication & RBAC       [COMPLETE]  (register/login/refresh/logout/verify/reset, JWT+Argon2, RBAC guards, rate limit, migration; 19 tests)
-Phase 5  Core travel features        [BACKEND DONE] locations/visa, flight+hotel search (mock+Amadeus fallback), trips (IDOR-safe), itinerary; 29 tests. Frontend planner = NEXT
-
-Phase 6  AI chatbot + evaluation     [PENDING]
+Phase 5  Core travel features        [COMPLETE] backend (locations/visa, flight+hotel search mock+Amadeus, trips IDOR-safe, itinerary; 29 tests) + planner UI (/dashboard/plan, /trips, /trips/[id])
+Phase 6  AI chatbot + evaluation     [PENDING]   <-- NEXT
 Phase 7  OCR + document verification [PENDING]
 Phase 8  External integrations       [PENDING]
 Phase 9  Subscriptions + entitlements[PENDING]

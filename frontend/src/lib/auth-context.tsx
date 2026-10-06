@@ -19,6 +19,8 @@ interface AuthState {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, fullName: string) => Promise<string | null | undefined>;
   logout: () => Promise<void>;
+  /** Run an authenticated API call, auto-refreshing the access token once on 401. */
+  authCall: <T>(fn: (token: string) => Promise<T>) => Promise<T>;
 }
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
@@ -90,6 +92,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [applyTokens],
   );
 
+  const authCall = useCallback(async <T,>(fn: (token: string) => Promise<T>): Promise<T> => {
+    const run = async (token: string | null): Promise<T> => {
+      if (!token) throw new ApiError("Not authenticated.", "not_authenticated", 401);
+      return fn(token);
+    };
+    try {
+      return await run(accessToken.current);
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401) {
+        const refresh = readRefresh();
+        if (refresh) {
+          const tokens = await authApi.refresh(refresh);
+          accessToken.current = tokens.access_token;
+          writeRefresh(tokens.refresh_token);
+          return run(tokens.access_token);
+        }
+      }
+      throw err;
+    }
+  }, []);
+
   const logout = useCallback(async () => {
     const refresh = readRefresh();
     if (refresh) {
@@ -105,7 +128,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, authCall }}>
       {children}
     </AuthContext.Provider>
   );
