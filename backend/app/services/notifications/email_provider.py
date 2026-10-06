@@ -67,6 +67,9 @@ class KlaviyoProvider:
         try:
             async with httpx.AsyncClient(timeout=20) as client:
                 resp = await client.post(f"{self._base}{path}", json=body, headers=self._headers())
+            # 409 on /profiles/ just means the contact already exists — benign.
+            if resp.status_code == 409:
+                return {"status": "exists", "provider": "klaviyo"}
             if resp.status_code >= 400:
                 logger.warning("klaviyo_error", status=resp.status_code, detail=resp.text[:200])
                 return {"status": "failed", "provider": "klaviyo", "error": resp.text[:300]}
