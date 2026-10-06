@@ -7,8 +7,8 @@ import { Alert } from "@/components/ui/Alert";
 const tiles = [
   { title: "Plan a trip", body: "Enter a destination to get flights, hotels and an itinerary.", href: "/dashboard/plan" },
   { title: "My trips", body: "View and manage your saved trips.", href: "/dashboard/trips" },
+  { title: "AI assistant", body: "Ask about visas, routes and requirements.", href: "/dashboard/assistant" },
   { title: "Verify documents", body: "Upload a passport or visa form for AI checks.", soon: true },
-  { title: "AI assistant", body: "Ask about visas, routes and requirements.", soon: true },
 ];
 
 export default function DashboardHome() {

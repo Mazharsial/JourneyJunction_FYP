@@ -8,14 +8,14 @@
 
 ## CURRENT PROJECT STATE
 ```
-Current Phase:      Phase 6 — AI chatbot (BACKEND COMPLETE; chat UI next)
-Current Feature:    Gemini travel assistant (grounded) + keyless fallback + evaluation
-Last Completed:     Phase 6 backend: chat endpoints, Gemini 2.5 Flash client, intent+grounding, evaluation (intent 100%, grounding 100%); live Gemini verified; 36 tests
-Last Successful Test: backend 36/36 pytest; eval 28/28 intent + 7/7 grounding; live Gemini chat OK
-Last Git Commit:    (pending Phase 6 backend commit; Phase 5 frontend = 54f2710 pushed)
+Current Phase:      Phase 6 — AI chatbot (COMPLETE: backend + chat UI)
+Current Feature:    Gemini travel assistant + /dashboard/assistant chat UI
+Last Completed:     Phase 6 frontend chat UI (/dashboard/assistant); backend d94e79d pushed; 36 tests; eval 100%/100%
+Last Successful Test: backend 36/36 pytest; eval 100%/100%; live Gemini verified; frontend build (12 routes)
+Last Git Commit:    (pending Phase 6 frontend commit; Phase 6 backend = d94e79d pushed)
 Current Branch:     main (develop to be created)
-Next Task:          Phase 6 frontend — chat UI (/dashboard/assistant) consuming /chat
-Blocked By:         Nothing. Gemini key is set + verified. Amadeus optional.
+Next Task:          Phase 7 — OCR + document verification/correction (Tesseract/EasyOCR/Gemini-Vision; ≥90% measured)
+Blocked By:         Nothing. Gemini key set + verified. Amadeus optional.
 Supervisor doc:     docs/VoynixAI_Project_Documentation.docx (FYP SRS/design report; open in Word and press F9 to populate the Table of Contents).
 Required Credentials (upcoming): Amadeus (P5), Gemini (P6), Stripe (P9), Meta WhatsApp + Klaviyo (P8)
 Known Issues:       npm reported transitive high-severity advisories (to review in P11 hardening)
