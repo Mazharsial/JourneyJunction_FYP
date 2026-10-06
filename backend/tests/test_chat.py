@@ -17,14 +17,14 @@ async def _token(client, email="chat@example.com") -> str:
 
 
 async def test_chat_requires_auth(client):
-    r = await client.post("/api/v1/chat/", json={"message": "hi"})
+    r = await client.post("/api/v1/chat", json={"message": "hi"})
     assert r.status_code == 401
 
 
 async def test_chat_visa_grounded_answer(client):
     token = await _token(client)
     r = await client.post(
-        "/api/v1/chat/",
+        "/api/v1/chat",
         headers=auth_header(token),
         json={"message": "Do I need a visa for Dubai from Pakistan?"},
     )
@@ -41,11 +41,11 @@ async def test_chat_visa_grounded_answer(client):
 async def test_chat_keeps_conversation_history(client):
     token = await _token(client)
     first = await client.post(
-        "/api/v1/chat/", headers=auth_header(token), json={"message": "Hello"}
+        "/api/v1/chat", headers=auth_header(token), json={"message": "Hello"}
     )
     cid = first.json()["conversation_id"]
     await client.post(
-        "/api/v1/chat/",
+        "/api/v1/chat",
         headers=auth_header(token),
         json={"message": "Suggest hotels in Dubai", "conversation_id": cid},
     )
@@ -60,7 +60,7 @@ async def test_chat_keeps_conversation_history(client):
 async def test_chat_out_of_scope_is_declined(client):
     token = await _token(client)
     r = await client.post(
-        "/api/v1/chat/", headers=auth_header(token), json={"message": "Write me a Python function"}
+        "/api/v1/chat", headers=auth_header(token), json={"message": "Write me a Python function"}
     )
     body = r.json()
     assert body["intent"] == "out_of_scope"
@@ -69,7 +69,7 @@ async def test_chat_out_of_scope_is_declined(client):
 
 async def test_conversation_list_and_idor(client):
     a = await _token(client, "owner@example.com")
-    created = await client.post("/api/v1/chat/", headers=auth_header(a), json={"message": "Hi"})
+    created = await client.post("/api/v1/chat", headers=auth_header(a), json={"message": "Hi"})
     cid = created.json()["conversation_id"]
 
     lst = await client.get("/api/v1/chat/conversations", headers=auth_header(a))

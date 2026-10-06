@@ -53,9 +53,8 @@ export function Features() {
           <motion.article
             key={f.title}
             initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.45, delay: (i % 3) * 0.06 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.05 + (i % 3) * 0.06 }}
             className={`rounded-2xl border bg-surface p-6 transition hover:-translate-y-1 hover:shadow-lg ${
               f.highlight ? "border-teal ring-1 ring-teal/30" : "border-border"
             }`}

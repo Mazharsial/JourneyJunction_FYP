@@ -26,7 +26,7 @@ router = APIRouter()
 _chat_limit = RateLimiter(max_requests=20, window_seconds=60, scope="chat")
 
 
-@router.post("/", response_model=ChatResponse, dependencies=[Depends(_chat_limit)])
+@router.post("", response_model=ChatResponse, dependencies=[Depends(_chat_limit)])
 async def chat(
     payload: ChatRequest,
     db: AsyncSession = Depends(get_db),

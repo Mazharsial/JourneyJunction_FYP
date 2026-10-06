@@ -18,7 +18,7 @@ export interface ChatResponse {
 
 export const chatApi = {
   send: (token: string, message: string, conversationId?: string) =>
-    apiFetch<ChatResponse>("/chat/", {
+    apiFetch<ChatResponse>("/chat", {
       method: "POST",
       token,
       body: { message, conversation_id: conversationId ?? null },

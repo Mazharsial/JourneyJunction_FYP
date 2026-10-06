@@ -11,7 +11,7 @@ PROTECTED = [
     ("GET", "/api/v1/trips"),
     ("POST", "/api/v1/trips"),
     ("GET", "/api/v1/flights/search?origin=LHE&destination=DXB&date=2027-01-01"),
-    ("POST", "/api/v1/chat/"),
+    ("POST", "/api/v1/chat"),
     ("GET", "/api/v1/chat/conversations"),
     ("GET", "/api/v1/documents"),
     ("GET", "/api/v1/billing/subscription"),

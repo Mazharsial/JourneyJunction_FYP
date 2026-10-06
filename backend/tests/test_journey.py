@@ -43,7 +43,7 @@ async def test_full_user_journey(client):
     assert len(detail.json()["suggested_flights"]) >= 1
 
     # 5. Ask the AI assistant
-    chat = await client.post("/api/v1/chat/", headers=h,
+    chat = await client.post("/api/v1/chat", headers=h,
                              json={"message": "Do I need a visa for Dubai from Pakistan?"})
     assert chat.status_code == 200 and chat.json()["intent"] == "visa"
     assert "visa required" in chat.json()["reply"]["content"].lower()

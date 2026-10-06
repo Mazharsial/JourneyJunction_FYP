@@ -12,48 +12,39 @@ from app.models.location import AppConfig, City, Country, Currency, VisaRule
 
 CURRENCIES = [
     ("AED", "UAE Dirham", "د.إ"),
-    ("USD", "US Dollar", "$"),
-    ("GBP", "Pound Sterling", "£"),
-    ("EUR", "Euro", "€"),
     ("PKR", "Pakistani Rupee", "₨"),
-    ("SAR", "Saudi Riyal", "﷼"),
-    ("TRY", "Turkish Lira", "₺"),
+    ("USD", "US Dollar", "$"),  # retained for billing / plan pricing display
 ]
 
+# Supported markets: Pakistan (home) and the UAE (the single international
+# destination). Seeded as data, not hardcoded in application logic.
 COUNTRIES = [
-    ("AE", "United Arab Emirates", "AED", "+971"),
     ("PK", "Pakistan", "PKR", "+92"),
-    ("GB", "United Kingdom", "GBP", "+44"),
-    ("US", "United States", "USD", "+1"),
-    ("SA", "Saudi Arabia", "SAR", "+966"),
-    ("TR", "Türkiye", "TRY", "+90"),
-    ("FR", "France", "EUR", "+33"),
+    ("AE", "United Arab Emirates", "AED", "+971"),
 ]
 
 # (country_iso2, name, iata, timezone, lat, lon)
 CITIES = [
+    # Pakistan cities
+    ("PK", "Karachi", "KHI", "Asia/Karachi", 24.8607, 67.0011),
+    ("PK", "Lahore", "LHE", "Asia/Karachi", 31.5204, 74.3587),
+    ("PK", "Islamabad", "ISB", "Asia/Karachi", 33.6844, 73.0479),
+    ("PK", "Peshawar", "PEW", "Asia/Karachi", 34.0151, 71.5249),
+    ("PK", "Quetta", "UET", "Asia/Karachi", 30.1798, 66.9750),
+    ("PK", "Faisalabad", "LYP", "Asia/Karachi", 31.4504, 73.1350),
+    ("PK", "Multan", "MUX", "Asia/Karachi", 30.1575, 71.5249),
+    ("PK", "Sialkot", "SKT", "Asia/Karachi", 32.4945, 74.5229),
+    # UAE — the only out-of-country destination
     ("AE", "Dubai", "DXB", "Asia/Dubai", 25.2048, 55.2708),
     ("AE", "Abu Dhabi", "AUH", "Asia/Dubai", 24.4539, 54.3773),
-    ("PK", "Lahore", "LHE", "Asia/Karachi", 31.5204, 74.3587),
-    ("PK", "Karachi", "KHI", "Asia/Karachi", 24.8607, 67.0011),
-    ("PK", "Islamabad", "ISB", "Asia/Karachi", 33.6844, 73.0479),
-    ("GB", "London", "LHR", "Europe/London", 51.5074, -0.1278),
-    ("US", "New York", "JFK", "America/New_York", 40.7128, -74.0060),
-    ("SA", "Jeddah", "JED", "Asia/Riyadh", 21.4858, 39.1925),
-    ("SA", "Riyadh", "RUH", "Asia/Riyadh", 24.7136, 46.6753),
-    ("TR", "Istanbul", "IST", "Europe/Istanbul", 41.0082, 28.9784),
-    ("FR", "Paris", "CDG", "Europe/Paris", 48.8566, 2.3522),
+    ("AE", "Sharjah", "SHJ", "Asia/Dubai", 25.3463, 55.4209),
 ]
 
 # (origin, destination, requirement, allowed_stay_days, notes)
 _SRC = "Demo data — always verify with official government sources."
 VISA_RULES = [
     ("PK", "AE", "visa_required", 30, "Apply for a UAE tourist visa before travelling."),
-    ("GB", "AE", "visa_on_arrival", 30, "Visa on arrival for UK passport holders."),
-    ("US", "AE", "visa_on_arrival", 30, "Visa on arrival for US passport holders."),
-    ("SA", "AE", "visa_free", 90, "GCC national — no visa required."),
-    ("TR", "AE", "visa_on_arrival", 30, "Visa on arrival for Turkish passport holders."),
-    ("FR", "AE", "visa_on_arrival", 90, "Visa on arrival for French passport holders."),
+    ("AE", "PK", "visa_required", 30, "Apply for a Pakistan visa before travelling."),
 ]
 
 

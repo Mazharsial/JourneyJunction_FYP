@@ -32,18 +32,18 @@ DATASET: list[EvalItem] = [
     EvalItem("Thanks!", GREETING),
     # visa (with route -> grounding checked)
     EvalItem("Do I need a visa for Dubai from Pakistan?", VISA, "visa required"),
-    EvalItem("Is a visa required to travel from the UK to the UAE?", VISA, "visa on arrival"),
-    EvalItem("Visa requirements from USA to Dubai", VISA, "visa on arrival"),
-    EvalItem("Do Saudi citizens need a visa for the UAE?", VISA, "visa free"),
-    EvalItem("What visa do I need for the UAE coming from Turkey?", VISA, "visa on arrival"),
-    EvalItem("Passport requirement for France to Dubai", VISA, "visa on arrival"),
+    EvalItem("Is a visa required to travel from Pakistan to the UAE?", VISA, "visa required"),
+    EvalItem("Visa requirements from Karachi to Dubai", VISA, "visa required"),
+    EvalItem("Do I need a visa for Abu Dhabi from Pakistan?", VISA, "visa required"),
+    EvalItem("What visa do I need for the UAE coming from Pakistan?", VISA, "visa required"),
+    EvalItem("Passport requirement travelling from the UAE to Pakistan", VISA, "visa required"),
     EvalItem("visa for dubai from pakistan", VISA, "visa required"),
     EvalItem("Do I need a visa?", VISA),
     # flights
     EvalItem("Find me flights from Lahore to Dubai", FLIGHT),
     EvalItem("What's the cheapest flight to Dubai?", FLIGHT),
     EvalItem("Show airfare from Karachi to Dubai", FLIGHT),
-    EvalItem("I want to fly to Istanbul", FLIGHT),
+    EvalItem("I want to fly to Abu Dhabi", FLIGHT),
     # hotels
     EvalItem("Suggest hotels in Dubai", HOTEL),
     EvalItem("I need accommodation in Abu Dhabi", HOTEL),
@@ -56,7 +56,7 @@ DATASET: list[EvalItem] = [
     # destination
     EvalItem("What's the best time to visit Dubai?", DESTINATION),
     EvalItem("Things to do in Dubai", DESTINATION),
-    EvalItem("Tell me about Istanbul", DESTINATION),
+    EvalItem("Tell me about Sharjah", DESTINATION),
     # out of scope
     EvalItem("What is 2 + 2?", OUT_OF_SCOPE),
     EvalItem("Write me a Python function", OUT_OF_SCOPE),
