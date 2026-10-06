@@ -1,0 +1,38 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="VoynixAI mark">
+  <defs>
+    <linearGradient id="vx-grad" x1="96" y1="80" x2="416" y2="432" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1B2A6B"/>
+      <stop offset="0.55" stop-color="#1E7FB8"/>
+      <stop offset="1" stop-color="#2BC6D6"/>
+    </linearGradient>
+    <linearGradient id="vx-plane" x1="150" y1="360" x2="380" y2="150" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2BC6D6"/>
+      <stop offset="1" stop-color="#8FE9F2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- rounded gradient badge -->
+  <rect x="24" y="24" width="464" height="464" rx="120" fill="url(#vx-grad)"/>
+
+  <!-- orbit ring -->
+  <circle cx="256" cy="256" r="150" stroke="#8FE9F2" stroke-opacity="0.35" stroke-width="6" fill="none"/>
+
+  <!-- circuit nodes -->
+  <g fill="#8FE9F2" fill-opacity="0.9">
+    <circle cx="106" cy="256" r="9"/>
+    <circle cx="406" cy="256" r="9"/>
+    <circle cx="256" cy="106" r="9"/>
+  </g>
+  <g stroke="#8FE9F2" stroke-opacity="0.5" stroke-width="5">
+    <line x1="106" y1="256" x2="150" y2="256"/>
+    <line x1="362" y1="256" x2="406" y2="256"/>
+  </g>
+
+  <!-- shield -->
+  <path d="M256 150 L338 184 V268 C338 320 300 352 256 372 C212 352 174 320 174 268 V184 Z"
+        fill="#FFFFFF" fill-opacity="0.10" stroke="#EAF7FA" stroke-opacity="0.55" stroke-width="5"/>
+
+  <!-- stylised V / paper-plane ascending -->
+  <path d="M196 212 L256 352 L316 212 L286 212 L256 290 L226 212 Z" fill="url(#vx-plane)"/>
+  <path d="M256 150 L300 196 L256 212 L212 196 Z" fill="#EAF7FA" fill-opacity="0.95"/>
+</svg>

@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+/* ============================================================
+   VoynixAI Design System — brand tokens (Tailwind v4 @theme)
+   Palette derived from the logo: deep navy + teal/cyan.
+   ============================================================ */
+:root {
+  --background: #f7fafc;
+  --foreground: #0d1b2a;
+
+  /* Brand */
+  --brand-navy: #16255c;
+  --brand-navy-600: #1e356f;
+  --brand-blue: #1e95c0;
+  --brand-teal: #19b6c9;
+  --brand-cyan: #3ddceb;
+  --brand-ai: #7c5cfc; /* reserved accent for AI surfaces */
+
+  /* Surfaces / text */
+  --surface: #ffffff;
+  --surface-muted: #eef3f8;
+  --text-muted: #5b6b7f;
+  --border: #dce4ee;
+
+  /* Semantic */
+  --success: #17a673;
+  --warning: #e0a008;
+  --error: #dc3b4b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-muted: var(--text-muted);
+  --color-border: var(--border);
+
+  --color-navy: var(--brand-navy);
+  --color-navy-600: var(--brand-navy-600);
+  --color-brand-blue: var(--brand-blue);
+  --color-teal: var(--brand-teal);
+  --color-cyan: var(--brand-cyan);
+  --color-ai: var(--brand-ai);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a1326;
+    --foreground: #e8eef7;
+    --surface: #0f1d3a;
+    --surface-muted: #13234a;
+    --text-muted: #9fb0c7;
+    --border: #233457;
+  }
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.brand-gradient {
+  background-image: linear-gradient(120deg, var(--brand-navy), var(--brand-blue) 55%, var(--brand-teal));
+}
+.brand-text-gradient {
+  background-image: linear-gradient(120deg, var(--brand-blue), var(--brand-teal));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Respect reduced-motion globally. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,7 @@
+# Normalise line endings across platforms.
+* text=auto eol=lf
+*.png binary
+*.ico binary
+*.docx binary
+*.pdf binary
+*.svg text eol=lf
