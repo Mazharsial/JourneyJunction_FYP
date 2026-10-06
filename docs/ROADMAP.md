@@ -16,10 +16,10 @@ Each phase ends with: tests + QA + security check → update `PROJECT_CONTEXT.md
 | 9 | Subscriptions + enforced entitlements + usage limits | ✅ Complete (Stripe checkout/portal/webhook, server-side limits, billing UI) |
 | 10 | Admin panel | ✅ Complete (users/roles/plans/visa/stats/audit/health + UI) |
 | 11 | Security hardening (OWASP, dependency audit) | ✅ Complete (deps patched, pip-audit clean, OWASP review, CI scans) |
-| 12 | QA (unit/integration/E2E/regression) | ⬜ |
-| 13 | Performance (profiling, caching, optimisation) | ⬜ |
-| 14 | CI/CD & deployment (free hosting) | ⬜ |
-| 15 | Final adversarial audit | ⬜ |
+| 12 | QA (unit/integration/E2E/regression) | ✅ Complete (91 tests; journey + access matrix; TESTING.md) |
+| 13 | Performance (profiling, caching, optimisation) | ✅ Complete (TTL cache + invalidation; PERFORMANCE.md) |
+| 14 | CI/CD & deployment (free hosting) | ⬜ Next — Render + Vercel |
+| 15 | Final adversarial audit | ✅ Complete (audit tests + SECRET_KEY guard; SECURITY.md) |
 
 ## MVP priority (given 8-week proposal window)
 P0 for a demoable MVP: **auth → core travel (with mock fallback) → AI chatbot → OCR document

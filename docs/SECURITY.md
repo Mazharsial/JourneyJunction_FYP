@@ -61,6 +61,25 @@ no secrets committed + gitleaks ✓), sensitive data (PII encryption + retention
 first-party outbound to Gemini/Stripe/Meta/Klaviyo ✓), components with known vulns (fixed above ✓),
 upload abuse (type/MIME/magic/size + UUID names ✓), rate-limit abuse (auth/AI/upload limited ✓).
 
+## Phase 15 — Final adversarial audit
+Independent review attempting to abuse the system. Scenarios checked (all pass; covered by
+`test_access_matrix.py` + `test_final_audit.py`):
+- **Broken access control / IDOR:** every protected endpoint rejects anonymous (401) and non-admins
+  on admin routes (403); trips/documents/chat/subscriptions are owner-scoped (non-owner → 404).
+- **Privilege escalation:** registration and preferences ignore smuggled `roles`/`is_verified`/
+  `is_active` fields (mass-assignment prevented — new users are always `traveler`, unverified); only a
+  super-admin can grant the super-admin role; admins can't deactivate themselves.
+- **Session integrity:** a disabled account's existing access token stops working immediately;
+  expired/invalid tokens → 401; refresh tokens are single-use (reuse → 401).
+- **Subscription bypass:** AI/OCR limits enforced server-side (402) regardless of the UI.
+- **Upload abuse:** spoofed MIME, wrong magic bytes, oversize and bad extensions rejected; no raw
+  files are ever served; filenames are UUIDs (no path traversal).
+- **Info leakage:** error envelopes are generic (no stack traces / SQL / filesystem paths).
+- **Webhook forgery:** Stripe webhooks require a valid signature (invalid → 400, unconfigured → 503).
+
+**Hardening fixed during the audit:** the app now **refuses to boot in production with a weak/default
+`SECRET_KEY`** (`app/main.py` lifespan guard).
+
 ## Planned (by phase)
 | Control | Phase |
 |---|---|

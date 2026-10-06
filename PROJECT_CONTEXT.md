@@ -8,14 +8,14 @@
 
 ## CURRENT PROJECT STATE
 ```
-Current Phase:      Phase 11 — Security hardening (COMPLETE)
-Current Feature:    Dependency patching + OWASP review + CI dependency scans
-Last Completed:     Phase 11: upgraded all vulnerable backend deps (fastapi 0.142/starlette 1.7/pyjwt 2.15/cryptography 50/Pillow 12.3/python-multipart 0.0.31/pytest 9) -> pip-audit CLEAN; npm production deps clean (dev-only braces accepted, no fix); pip-audit + npm audit added to CI; OWASP self-review in SECURITY.md. 65 tests still pass.
-Last Successful Test: backend 65/65 pytest (post-upgrade); frontend build OK; pip-audit clean
-Last Git Commit:    (pending Phase 11 commit; Phase 8 = aae8f3c pushed)
+Current Phase:      Phases 12 (QA) + 13 (Performance) + 15 (Final audit) — COMPLETE
+Current Feature:    QA journey + access matrix; TTL cache; adversarial audit + SECRET_KEY guard
+Last Completed:     P12 journey+access-matrix tests + TESTING.md; P13 in-process TTL cache (locations/plans) + invalidation + PERFORMANCE.md; P15 audit tests + production SECRET_KEY boot guard + SECURITY.md audit section. 91 tests pass.
+Last Successful Test: backend 91/91 pytest; compile clean
+Last Git Commit:    (pending P12/13/15 commit; Phase 11 = 2cd0ec7 pushed)
 Current Branch:     main (develop to be created)
-Next Task:          Phase 12 QA / Phase 13 performance / Phase 14 deployment / Phase 15 final audit. Phases done: 0-11.
-Blocked By:         Nothing. WhatsApp/Klaviyo mock until keys provided. One accepted dev-only npm advisory (braces, no fix, not in runtime).
+Next Task:          Phase 14 — Deployment (Render backend+Postgres, Vercel frontend). ALL other phases (0-13,15) done.
+Blocked By:         Nothing. For deploy: create Render + Vercel accounts; set env vars (SECRET_KEY, DATABASE_URL, keys). WhatsApp/Klaviyo still mock until keys.
 Supervisor doc:     docs/VoynixAI_Project_Documentation.docx (FYP SRS/design report; open in Word and press F9 to populate the Table of Contents).
 Required Credentials (upcoming): Amadeus (P5), Gemini (P6), Stripe (P9), Meta WhatsApp + Klaviyo (P8)
 Known Issues:       npm reported transitive high-severity advisories (to review in P11 hardening)
@@ -95,7 +95,10 @@ Phase 9  Subscriptions + entitlements[COMPLETE] plans/features seed, server-side
 Phase 10 Admin panel                 [COMPLETE] perm-gated admin: users/roles/plans/visa/stats/audit/health + UI; audit logging; 59 tests
 Phase 8  WhatsApp + Klaviyo          [COMPLETE] WhatsApp Cloud API + Klaviyo (abstraction) + mock fallback, notification_service wired to events, prefs + webhook + settings UI; 65 tests. Live when keys added.
 Phase 11 Security hardening          [COMPLETE] all backend deps patched (pip-audit clean), OWASP self-review, CI dep scans; dev-only braces advisory accepted (no fix, not in runtime)
-Phase 12 QA                          [PENDING]   <-- NEXT
+Phase 12 QA                          [COMPLETE] 91 tests; full journey E2E + access-control matrix; TESTING.md
+Phase 13 Performance                 [COMPLETE] in-process TTL cache (locations/plans) + admin invalidation; selectin/indexes/async; PERFORMANCE.md
+Phase 15 Final adversarial audit     [COMPLETE] audit tests (IDOR/escalation/disabled-token/leakage/webhook) + production SECRET_KEY boot guard
+Phase 14 CI/CD & Deployment          [PENDING]   <-- NEXT (Render + Vercel)
 Phase 9  Subscriptions + entitlements[PENDING]
 Phase 10 Admin                       [PENDING]
 Phase 11 Security hardening          [PENDING]

@@ -6,6 +6,7 @@ import uuid
 from sqlalchemy import func, or_, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.cache import cache
 from app.core.exceptions import AppError
 from app.core.rbac import Roles
 from app.models.audit import AuditLog
@@ -120,6 +121,7 @@ async def update_plan_feature(session, *, actor: User, plan_code: str, feature_k
                        entity_id=plan_code, meta={"feature": feature_key, "enabled": enabled, "limit": limit_value},
                        ip=ip)
     await session.flush()
+    cache.clear()  # plans/entitlements changed
     return plan
 
 
@@ -144,6 +146,7 @@ async def upsert_visa_rule(session, *, actor: User, origin, destination, require
     await record_audit(session, actor_id=actor.id, action="visa_rule.upsert", entity="visa_rule",
                        entity_id=f"{origin}->{destination}", meta={"created": created, "requirement": requirement}, ip=ip)
     await session.flush()
+    cache.clear()  # visa lookups cached
     return rule
 
 
@@ -155,6 +158,7 @@ async def delete_visa_rule(session, *, actor: User, rule_id: uuid.UUID, ip="") -
                        entity_id=f"{rule.origin_iso2}->{rule.destination_iso2}", ip=ip)
     await session.delete(rule)
     await session.flush()
+    cache.clear()  # visa lookups cached
 
 
 async def list_audit_logs(session, *, limit: int, offset: int):

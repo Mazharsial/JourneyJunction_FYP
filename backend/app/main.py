@@ -21,9 +21,19 @@ configure_logging()
 logger = get_logger("startup")
 
 
+_WEAK_SECRETS = {"change-me-dev-only", "change-me-dev-only-not-a-real-secret", ""}
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     settings = get_settings()
+    # Production guard: refuse to boot with a weak/default signing key.
+    if settings.is_production and (
+        settings.secret_key in _WEAK_SECRETS or len(settings.secret_key) < 32
+    ):
+        raise RuntimeError(
+            "SECRET_KEY is weak/default — set a strong SECRET_KEY before running in production."
+        )
     logger.info(
         "application_start",
         brand=settings.brand_name,

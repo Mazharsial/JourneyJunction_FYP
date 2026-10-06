@@ -77,6 +77,8 @@ async def app_instance(db_engine):
     app = create_app()
     app.dependency_overrides[get_db] = override_get_db
     reset_rate_limits()
+    from app.core.cache import cache
+    cache.clear()
     return app
 
 
