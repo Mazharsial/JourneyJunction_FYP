@@ -184,5 +184,8 @@ async def health(session) -> dict:
         "database": "ok" if db_ok else "down",
         "gemini": "configured" if gemini_client.is_configured() else "mock",
         "stripe": "configured" if stripe_service.is_configured() else "disabled",
-        "amadeus": "configured" if (s.amadeus_client_id and s.amadeus_client_secret) else "mock",
+        "flights": "configured" if s.travelpayouts_token else "mock",
+        "hotels": "configured" if s.geoapify_api_key else "mock",
+        "whatsapp": "configured" if s.whatsapp_access_token else "mock",
+        "email": "configured" if s.klaviyo_api_key else "mock",
     }

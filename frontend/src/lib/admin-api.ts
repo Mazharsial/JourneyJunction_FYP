@@ -13,7 +13,42 @@ export interface Health {
   database: string;
   gemini: string;
   stripe: string;
-  amadeus: string;
+  flights: string;
+  hotels: string;
+  whatsapp: string;
+  email: string;
+}
+export interface AdminPlanFeature {
+  feature_key: string;
+  enabled: boolean;
+  limit_value: number | null;
+}
+export interface AdminPlan {
+  code: string;
+  name: string;
+  description: string;
+  price_cents: number;
+  currency: string;
+  interval: string;
+  purchasable: boolean;
+  features: AdminPlanFeature[];
+}
+export interface VisaRule {
+  id: string;
+  origin_iso2: string;
+  destination_iso2: string;
+  requirement: string;
+  allowed_stay_days: number | null;
+  notes: string;
+  source: string;
+}
+export interface VisaRuleInput {
+  origin: string;
+  destination: string;
+  requirement: string;
+  allowed_stay_days?: number | null;
+  notes?: string;
+  source?: string;
 }
 export interface AdminUser {
   id: string;
@@ -49,6 +84,19 @@ export const adminApi = {
   updateUser: (t: string, id: string, patch: Partial<Pick<AdminUser, "is_active" | "is_verified" | "roles">>) =>
     apiFetch<AdminUser>(`/admin/users/${id}`, { method: "PATCH", token: t, body: patch }),
   auditLogs: (t: string) => apiFetch<{ items: AuditLog[]; total: number }>("/admin/audit-logs", { token: t }),
+
+  plans: (t: string) => apiFetch<AdminPlan[]>("/admin/plans", { token: t }),
+  updatePlanFeature: (
+    t: string,
+    code: string,
+    body: { feature_key: string; enabled?: boolean | null; limit_value?: number | null },
+  ) => apiFetch<AdminPlan>(`/admin/plans/${code}/features`, { method: "PATCH", token: t, body }),
+
+  visaRules: (t: string) => apiFetch<VisaRule[]>("/admin/visa-rules", { token: t }),
+  upsertVisaRule: (t: string, body: VisaRuleInput) =>
+    apiFetch<VisaRule>("/admin/visa-rules", { method: "PUT", token: t, body }),
+  deleteVisaRule: (t: string, id: string) =>
+    apiFetch<null>(`/admin/visa-rules/${id}`, { method: "DELETE", token: t }),
 };
 
 export function isAdmin(roles: string[]): boolean {

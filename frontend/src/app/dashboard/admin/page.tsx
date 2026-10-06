@@ -13,6 +13,8 @@ import {
   type AuditLog,
   type Health,
 } from "@/lib/admin-api";
+import { PlansManager } from "@/components/admin/PlansManager";
+import { VisaRulesManager } from "@/components/admin/VisaRulesManager";
 
 function StatCard({ label, value }: { label: string; value: number | string }) {
   return (
@@ -64,6 +66,15 @@ export default function AdminPage() {
   async function toggleActive(u: AdminUser) {
     try {
       await authCall((t) => adminApi.updateUser(t, u.id, { is_active: !u.is_active }));
+      await loadUsers(q);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Update failed.");
+    }
+  }
+
+  async function toggleVerified(u: AdminUser) {
+    try {
+      await authCall((t) => adminApi.updateUser(t, u.id, { is_verified: !u.is_verified }));
       await loadUsers(q);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Update failed.");
@@ -131,7 +142,13 @@ export default function AdminPage() {
                 <tr key={u.id} className="border-t border-border">
                   <td className="px-3 py-2 text-foreground">{u.email}</td>
                   <td className="px-3 py-2 text-muted">{u.roles.join(", ")}</td>
-                  <td className="px-3 py-2">{u.is_verified ? "✓" : "—"}</td>
+                  <td className="px-3 py-2">
+                    <button onClick={() => toggleVerified(u)} className="text-xs font-medium hover:underline">
+                      <span className={u.is_verified ? "text-success" : "text-muted"}>
+                        {u.is_verified ? "✓ verified" : "unverified"}
+                      </span>
+                    </button>
+                  </td>
                   <td className="px-3 py-2">
                     <span className={u.is_active ? "text-success" : "text-error"}>
                       {u.is_active ? "active" : "disabled"}
@@ -148,6 +165,10 @@ export default function AdminPage() {
           </table>
         </div>
       </section>
+
+      <PlansManager />
+
+      <VisaRulesManager />
 
       <section>
         <h2 className="text-lg font-semibold text-foreground">Recent audit log</h2>
