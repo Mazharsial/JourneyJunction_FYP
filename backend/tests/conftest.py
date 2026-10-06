@@ -17,7 +17,7 @@ os.environ["WHATSAPP_ACCESS_TOKEN"] = ""
 os.environ["WHATSAPP_VERIFY_TOKEN"] = ""
 os.environ["KLAVIYO_API_KEY"] = ""
 # Isolate uploaded (encrypted) files to a temp dir; keep upload limit small.
-os.environ["STORAGE_DIR"] = tempfile.mkdtemp(prefix="voynix_test_storage_")
+os.environ["STORAGE_DIR"] = tempfile.mkdtemp(prefix="journeyjunction_test_storage_")
 os.environ["MAX_UPLOAD_MB"] = "2"
 
 import pytest_asyncio

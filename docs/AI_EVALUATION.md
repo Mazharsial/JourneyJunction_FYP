@@ -1,4 +1,4 @@
-# AI Chatbot Evaluation — VoynixAI
+# AI Chatbot Evaluation — Journey Junction
 
 Measured, reproducible accuracy for the travel assistant. Results are **computed by a
 harness**, not claimed. Re-run anytime:

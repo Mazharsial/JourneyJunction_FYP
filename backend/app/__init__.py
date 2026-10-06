@@ -1,3 +1,3 @@
-"""VoynixAI backend application package."""
+"""Journey Junction backend application package."""
 
 __version__ = "0.1.0"

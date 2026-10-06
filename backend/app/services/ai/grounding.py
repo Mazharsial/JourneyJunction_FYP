@@ -167,7 +167,7 @@ def grounded_fallback(text: str, ctx: dict) -> str:
     intent = ctx["intent"]
     facts = ctx["facts"]
     if intent == GREETING:
-        return "Hello! I'm your VoynixAI travel assistant. Ask me about visas, flights, hotels or planning a trip."
+        return "Hello! I'm your Journey Junction travel assistant. Ask me about visas, flights, hotels or planning a trip."
     if intent == VISA:
         if facts:
             return f"{facts[0]}\n\n{VISA_DISCLAIMER}"

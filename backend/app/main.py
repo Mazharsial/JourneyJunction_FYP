@@ -1,5 +1,5 @@
 """
-VoynixAI API — application factory.
+Journey Junction API — application factory.
 
 Boots cleanly without external services; dependency health is reported via
 `/api/v1/health/ready` rather than failing startup.

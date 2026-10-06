@@ -21,7 +21,7 @@ const SUGGESTIONS = [
 export default function AssistantPage() {
   const { authCall } = useAuth();
   const [messages, setMessages] = useState<Msg[]>([
-    { role: "assistant", content: "Hi! I'm your VoynixAI travel assistant. Ask me about visas, flights, hotels or planning a trip." },
+    { role: "assistant", content: "Hi! I'm your Journey Junction travel assistant. Ask me about visas, flights, hotels or planning a trip." },
   ]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);

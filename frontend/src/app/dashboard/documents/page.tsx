@@ -196,7 +196,7 @@ export default function DocumentsPage() {
             onChange={(e) => setConsent(e.target.checked)}
             className="mt-0.5"
           />
-          I consent to VoynixAI securely processing this document to verify it. It is encrypted and
+          I consent to Journey Junction securely processing this document to verify it. It is encrypted and
           auto-deleted after the retention period.
         </label>
         <Button type="submit" loading={uploading}>

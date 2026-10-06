@@ -1,4 +1,4 @@
-# Testing & QA — VoynixAI
+# Testing & QA — Journey Junction
 
 ## How to run
 ```bash

@@ -1,19 +1,19 @@
-# VoynixAI — local development stack (runs entirely on your machine via Docker Desktop).
+# Journey Junction — local development stack (runs entirely on your machine via Docker Desktop).
 # Usage:  cp .env.example .env   &&   docker compose up --build
 
 services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-voynix}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-voynix_dev_password}
-      POSTGRES_DB: ${POSTGRES_DB:-voynixai}
+      POSTGRES_USER: ${POSTGRES_USER:-journeyjunction}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-journeyjunction_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-journeyjunction}
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-voynix} -d ${POSTGRES_DB:-voynixai}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-journeyjunction} -d ${POSTGRES_DB:-journeyjunction}"]
       interval: 10s
       timeout: 5s
       retries: 5

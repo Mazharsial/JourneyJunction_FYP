@@ -4,10 +4,10 @@
  * the brand elsewhere in the UI.
  */
 export const brand = {
-  name: process.env.NEXT_PUBLIC_BRAND_NAME ?? "VoynixAI",
+  name: process.env.NEXT_PUBLIC_BRAND_NAME ?? "Journey Junction",
   tagline: "AI-powered smart travel planning & document verification",
-  logo: "/brand/voynixai-logo.svg",
-  mark: "/brand/voynixai-mark.svg",
+  logo: "/brand/journeyjunction-logo.svg",
+  mark: "/brand/journeyjunction-mark.svg",
   // Initial market (configurable; mirrors backend defaults).
   defaultMarket: {
     city: process.env.NEXT_PUBLIC_DEFAULT_CITY ?? "Dubai",

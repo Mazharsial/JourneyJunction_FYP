@@ -1,4 +1,4 @@
-# Security — VoynixAI
+# Security — Journey Junction
 
 Security is a cross-cutting concern reviewed at every phase (OWASP Top-10 based). This document
 grows as controls are implemented; the foundation items below are already in place.

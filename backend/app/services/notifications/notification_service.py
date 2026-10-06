@@ -19,7 +19,7 @@ logger = get_logger("notify")
 
 
 def _render(event: str, ctx: dict) -> str:
-    brand = "VoynixAI"
+    brand = "Journey Junction"
     if event == "welcome":
         return f"Welcome to {brand}! Start planning smarter trips and verify your travel documents with AI."
     if event == "trip_created":

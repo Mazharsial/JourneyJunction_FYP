@@ -1,4 +1,4 @@
-# Environment & Configuration — VoynixAI
+# Environment & Configuration — Journey Junction
 
 All configuration is environment-driven. Copy `.env.example` → `.env` (root, used by docker-compose
 and the backend) and `frontend/.env.example` → `frontend/.env.local`. **Never commit real values.**
@@ -12,7 +12,7 @@ and the backend) and `frontend/.env.example` → `frontend/.env.local`. **Never 
 ## Variables
 | Variable | Used by | Phase | Notes |
 |---|---|---|---|
-| `BRAND_NAME` | backend | now | Brand label (default VoynixAI) |
+| `BRAND_NAME` | backend | now | Brand label (default Journey Junction) |
 | `SECRET_KEY` | backend | now | JWT/signing. Generate: `python -c "import secrets;print(secrets.token_urlsafe(48))"` |
 | `POSTGRES_*` / `DATABASE_URL` | backend | now | PostgreSQL connection |
 | `REDIS_*` / `REDIS_URL` | backend/worker | now | Cache + Celery broker |

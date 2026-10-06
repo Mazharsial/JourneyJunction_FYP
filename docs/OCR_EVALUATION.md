@@ -1,4 +1,4 @@
-# OCR & Document Verification Evaluation — VoynixAI
+# OCR & Document Verification Evaluation — Journey Junction
 
 Two layers are measured independently and honestly.
 

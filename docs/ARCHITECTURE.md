@@ -1,4 +1,4 @@
-# Architecture — VoynixAI
+# Architecture — Journey Junction
 
 ## Style
 Modular **monolith** (single deployable FastAPI backend + Next.js frontend) with clean module

@@ -1,4 +1,4 @@
-# Performance — VoynixAI
+# Performance — Journey Junction
 
 Measure first, optimise what matters. Current optimisations:
 

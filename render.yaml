@@ -3,7 +3,7 @@
 # Secrets marked `sync: false` are set once in the Render dashboard (never committed).
 services:
   - type: web
-    name: voynixai-api
+    name: journeyjunction-api
     runtime: python
     rootDir: backend
     plan: free
@@ -22,10 +22,10 @@ services:
         generateValue: true          # Render generates a strong secret
       - key: DATABASE_URL
         fromDatabase:
-          name: voynixai-db
+          name: journeyjunction-db
           property: connectionString
       - key: CORS_ORIGINS
-        sync: false                   # set to your Vercel URL, e.g. https://voynixai.vercel.app
+        sync: false                   # set to your Vercel URL, e.g. https://journeyjunction.vercel.app
       - key: BILLING_SUCCESS_URL
         sync: false                   # https://<vercel-url>/dashboard/billing?status=success
       - key: BILLING_CANCEL_URL
@@ -57,7 +57,7 @@ services:
         sync: false
 
 databases:
-  - name: voynixai-db
+  - name: journeyjunction-db
     plan: free
-    databaseName: voynixai
-    user: voynix
+    databaseName: journeyjunction
+    user: journeyjunction

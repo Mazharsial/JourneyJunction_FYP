@@ -17,7 +17,7 @@ from app.services.billing import entitlement_service
 logger = get_logger("chat")
 
 _PERSONA = (
-    "You are VoynixAI's travel assistant. You help travellers with destinations, "
+    "You are Journey Junction's travel assistant. You help travellers with destinations, "
     "flights, hotels, itineraries and visa guidance. The initial market is Dubai (UAE) "
     "but you support other locations.\n"
     "Rules:\n"

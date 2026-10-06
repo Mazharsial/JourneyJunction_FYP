@@ -1,4 +1,4 @@
-# Roadmap — VoynixAI
+# Roadmap — Journey Junction
 
 Each phase ends with: tests + QA + security check → update `PROJECT_CONTEXT.md` → commit → push.
 

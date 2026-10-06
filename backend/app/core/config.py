@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     )
 
     # ---- Brand / core ----
-    brand_name: str = Field(default="VoynixAI", alias="BRAND_NAME")
+    brand_name: str = Field(default="Journey Junction", alias="BRAND_NAME")
     app_env: str = Field(default="development", alias="APP_ENV")
     debug: bool = Field(default=True, alias="DEBUG")
     api_v1_prefix: str = Field(default="/api/v1", alias="API_V1_PREFIX")
@@ -33,9 +33,9 @@ class Settings(BaseSettings):
     cors_origins: str = Field(default="http://localhost:3000", alias="CORS_ORIGINS")
 
     # ---- Database (PostgreSQL) ----
-    postgres_user: str = Field(default="voynix", alias="POSTGRES_USER")
-    postgres_password: str = Field(default="voynix_dev_password", alias="POSTGRES_PASSWORD")
-    postgres_db: str = Field(default="voynixai", alias="POSTGRES_DB")
+    postgres_user: str = Field(default="journeyjunction", alias="POSTGRES_USER")
+    postgres_password: str = Field(default="journeyjunction_dev_password", alias="POSTGRES_PASSWORD")
+    postgres_db: str = Field(default="journeyjunction", alias="POSTGRES_DB")
     postgres_host: str = Field(default="localhost", alias="POSTGRES_HOST")
     postgres_port: int = Field(default=5432, alias="POSTGRES_PORT")
     database_url_override: str = Field(default="", alias="DATABASE_URL")

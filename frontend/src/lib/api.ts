@@ -1,5 +1,5 @@
 /**
- * Typed client for the VoynixAI API.
+ * Typed client for the Journey Junction API.
  *
  * Parses the backend's structured error envelope and throws `ApiError` with a
  * user-friendly message and machine-readable code.

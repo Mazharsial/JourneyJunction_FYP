@@ -74,7 +74,7 @@ export default function SettingsPage() {
     setError(null);
     setMsg(null);
     try {
-      const res = await authCall((t) => notificationsApi.test(t, channel, "This is a VoynixAI test message."));
+      const res = await authCall((t) => notificationsApi.test(t, channel, "This is a Journey Junction test message."));
       setMsg(`Test ${channel} ${res.status}${res.status === "mock" ? " (no provider key configured — mock mode)" : ""}.`);
       await refreshNotifs();
     } catch (e) {

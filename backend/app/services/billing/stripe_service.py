@@ -112,7 +112,7 @@ async def create_catalog(session: AsyncSession) -> list[dict]:
             out.append({"plan": code, "price_id": plan.stripe_price_id, "created": False})
             continue
 
-        lookup_key = f"voynix_{code}"
+        lookup_key = f"journeyjunction_{code}"
         existing = await run_in_threadpool(
             lambda lk=lookup_key: stripe.Price.list(lookup_keys=[lk], limit=1)
         )
@@ -125,7 +125,7 @@ async def create_catalog(session: AsyncSession) -> list[dict]:
             continue
 
         product = await run_in_threadpool(
-            lambda p=plan: stripe.Product.create(name=f"VoynixAI {p.name}", metadata={"plan_code": p.code})
+            lambda p=plan: stripe.Product.create(name=f"Journey Junction {p.name}", metadata={"plan_code": p.code})
         )
         price = await run_in_threadpool(
             lambda p=plan, pr=product, lk=lookup_key: stripe.Price.create(

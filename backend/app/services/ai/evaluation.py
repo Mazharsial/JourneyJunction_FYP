@@ -109,7 +109,7 @@ def _main() -> None:
             ground = await evaluate_grounding(s)
         await engine.dispose()
 
-        print("=== VoynixAI Chatbot Evaluation ===")
+        print("=== Journey Junction Chatbot Evaluation ===")
         print(f"Intent classification: {intent['correct']}/{intent['total']} = {intent['accuracy']:.1%}")
         for f in intent["failures"]:
             print(f"  MISS: {f}")

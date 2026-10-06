@@ -1,4 +1,4 @@
-# Database — VoynixAI (PostgreSQL only)
+# Database — Journey Junction (PostgreSQL only)
 
 No MongoDB. Flexible/semi-structured data (AI payloads, logs, extracted fields) uses PostgreSQL
 `JSONB`. UUID primary keys, timezone-aware `created_at`/`updated_at` (see `app/db/base.py` mixins),

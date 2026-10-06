@@ -1,4 +1,4 @@
-# PROJECT_CONTEXT.md — VoynixAI (single source of truth)
+# PROJECT_CONTEXT.md — Journey Junction (single source of truth)
 
 > This file is the project's living memory. Anyone (human or AI) should be able to read this +
 > the repo + the proposal and continue development without the prior conversation.
@@ -16,7 +16,7 @@ Last Git Commit:    (pending P12/13/15 commit; Phase 11 = 2cd0ec7 pushed)
 Current Branch:     main (develop to be created)
 Next Task:          Phase 14 — Deployment (Render backend+Postgres, Vercel frontend). ALL other phases (0-13,15) done.
 Blocked By:         Nothing. For deploy: create Render + Vercel accounts; set env vars (SECRET_KEY, DATABASE_URL, keys). WhatsApp/Klaviyo still mock until keys.
-Supervisor doc:     docs/VoynixAI_Project_Documentation.docx (FYP SRS/design report; open in Word and press F9 to populate the Table of Contents).
+Supervisor doc:     docs/Journey Junction_Project_Documentation.docx (FYP SRS/design report; open in Word and press F9 to populate the Table of Contents).
 Required Credentials (upcoming): Amadeus (P5), Gemini (P6), Stripe (P9), Meta WhatsApp + Klaviyo (P8)
 Known Issues:       npm reported transitive high-severity advisories (to review in P11 hardening)
 ```
@@ -24,7 +24,7 @@ Known Issues:       npm reported transitive high-severity advisories (to review 
 ---
 
 ## PROJECT IDENTITY
-- **Name:** VoynixAI (brand configurable via `BRAND_NAME` / `NEXT_PUBLIC_BRAND_NAME`; formerly "Tripzy"; may change).
+- **Name:** Journey Junction (brand configurable via `BRAND_NAME` / `NEXT_PUBLIC_BRAND_NAME`; formerly "Tripzy"; may change).
 - **Purpose:** One-stop AI travel planning + unique AI document verification & correction.
 - **Problem:** Trip planning is fragmented, slow, costly; travellers face visa rejections from small document errors; no single platform does end-to-end planning **plus** AI document verification.
 - **Target users:** Domestic/international travellers, business travellers, families, first-timers, budget & luxury travellers, people planning without agents.

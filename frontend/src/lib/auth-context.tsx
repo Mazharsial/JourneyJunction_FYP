@@ -11,7 +11,7 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { authApi, ApiError, type UserOut } from "@/lib/api";
 
-const REFRESH_KEY = "voynix_refresh";
+const REFRESH_KEY = "journeyjunction_refresh";
 
 interface AuthState {
   user: UserOut | null;

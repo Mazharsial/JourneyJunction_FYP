@@ -1,11 +1,11 @@
-<p align="center"><img src="frontend/public/brand/voynixai-logo.svg" width="320" alt="VoynixAI"></p>
+<p align="center"><img src="frontend/public/brand/journeyjunction-logo.svg" width="320" alt="Journey Junction"></p>
 
-<h1 align="center">VoynixAI</h1>
+<h1 align="center">Journey Junction</h1>
 <p align="center">AI-powered smart travel planning &amp; document verification platform.</p>
 
 ---
 
-VoynixAI lets a traveller enter a destination and instantly receive **flights, hotels, budget-aware
+Journey Junction lets a traveller enter a destination and instantly receive **flights, hotels, budget-aware
 recommendations and an AI-generated itinerary** — plus its flagship feature: **AI-powered travel
 document verification & correction** (OCR + LLM analysis of passports, visa forms and tickets with
 compliance checking).
