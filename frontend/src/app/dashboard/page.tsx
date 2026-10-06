@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { Alert } from "@/components/ui/Alert";
 
-const tiles = [
+type Tile = { title: string; body: string; href?: string; soon?: boolean };
+
+const tiles: Tile[] = [
   { title: "Plan a trip", body: "Enter a destination to get flights, hotels and an itinerary.", href: "/dashboard/plan" },
   { title: "My trips", body: "View and manage your saved trips.", href: "/dashboard/trips" },
   { title: "AI assistant", body: "Ask about visas, routes and requirements.", href: "/dashboard/assistant" },
-  { title: "Verify documents", body: "Upload a passport or visa form for AI checks.", soon: true },
+  { title: "Verify documents", body: "Upload a passport or visa form for AI checks.", href: "/dashboard/documents" },
 ];
 
 export default function DashboardHome() {
