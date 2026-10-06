@@ -8,14 +8,14 @@
 
 ## CURRENT PROJECT STATE
 ```
-Current Phase:      Phase 5 — Core travel (COMPLETE: backend + planner UI)
-Current Feature:    Trip planner (create/list/detail) + locations/visa + flight/hotel search
-Last Completed:     Phase 5 frontend planner; live HTTP smoke of full flow (create trip Lahore->Dubai luxury -> 5-day itinerary, 4 flights business, 4 hotels, visa); frontend builds (11 routes)
-Last Successful Test: backend 29/29 pytest + live HTTP smoke; frontend `npm run build` passed
-Last Git Commit:    (pending Phase 5 frontend commit; Phase 5 backend = 4aa7802 pushed)
+Current Phase:      Phase 6 — AI chatbot (BACKEND COMPLETE; chat UI next)
+Current Feature:    Gemini travel assistant (grounded) + keyless fallback + evaluation
+Last Completed:     Phase 6 backend: chat endpoints, Gemini 2.5 Flash client, intent+grounding, evaluation (intent 100%, grounding 100%); live Gemini verified; 36 tests
+Last Successful Test: backend 36/36 pytest; eval 28/28 intent + 7/7 grounding; live Gemini chat OK
+Last Git Commit:    (pending Phase 6 backend commit; Phase 5 frontend = 54f2710 pushed)
 Current Branch:     main (develop to be created)
-Next Task:          Phase 6 — AI chatbot (Gemini) + evaluation (needs GEMINI_API_KEY; mock fallback until provided)
-Blocked By:         Nothing. Amadeus live data optional (mock fallback works). Gemini key needed for live AI in P6.
+Next Task:          Phase 6 frontend — chat UI (/dashboard/assistant) consuming /chat
+Blocked By:         Nothing. Gemini key is set + verified. Amadeus optional.
 Supervisor doc:     docs/VoynixAI_Project_Documentation.docx (FYP SRS/design report; open in Word and press F9 to populate the Table of Contents).
 Required Credentials (upcoming): Amadeus (P5), Gemini (P6), Stripe (P9), Meta WhatsApp + Klaviyo (P8)
 Known Issues:       npm reported transitive high-severity advisories (to review in P11 hardening)
@@ -89,7 +89,7 @@ Phase 2  Design System & UI shell    [IN PROGRESS] (tokens + brand + landing pag
 Phase 3  Project Foundation          [COMPLETE]  (backend+frontend+docker+CI+docs; tests green)
 Phase 4  Authentication & RBAC       [COMPLETE]  (register/login/refresh/logout/verify/reset, JWT+Argon2, RBAC guards, rate limit, migration; 19 tests)
 Phase 5  Core travel features        [COMPLETE] backend (locations/visa, flight+hotel search mock+Amadeus, trips IDOR-safe, itinerary; 29 tests) + planner UI (/dashboard/plan, /trips, /trips/[id])
-Phase 6  AI chatbot + evaluation     [PENDING]   <-- NEXT
+Phase 6  AI chatbot + evaluation     [BACKEND DONE] Gemini 2.5 Flash + intent/grounding + keyless fallback; eval 100%/100%; 36 tests. Chat UI = NEXT
 Phase 7  OCR + document verification [PENDING]
 Phase 8  External integrations       [PENDING]
 Phase 9  Subscriptions + entitlements[PENDING]

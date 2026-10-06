@@ -3,13 +3,14 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from app.api.v1.routes import auth, health, locations, travel
+from app.api.v1.routes import auth, chat, health, locations, travel
 
 api_router = APIRouter()
 api_router.include_router(health.router)
 api_router.include_router(auth.router, prefix="/auth", tags=["auth"])
 api_router.include_router(locations.router, prefix="/locations", tags=["locations"])
 api_router.include_router(travel.router)
+api_router.include_router(chat.router, prefix="/chat", tags=["chat"])
 
 # Future phases register here:
 #   api_router.include_router(documents.router, prefix="/documents", tags=["documents"])

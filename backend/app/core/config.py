@@ -63,6 +63,11 @@ class Settings(BaseSettings):
     amadeus_client_secret: str = Field(default="", alias="AMADEUS_CLIENT_SECRET")
     amadeus_env: str = Field(default="test", alias="AMADEUS_ENV")
 
+    # ---- AI (Google Gemini; grounded-mock fallback if unset) ----
+    gemini_api_key: str = Field(default="", alias="GEMINI_API_KEY")
+    gemini_model: str = Field(default="gemini-2.5-flash", alias="GEMINI_MODEL")
+    ai_max_history: int = Field(default=12, alias="AI_MAX_HISTORY")  # messages of context
+
     # ---- Default market (seeded into DB, overridable) ----
     default_country: str = Field(default="AE", alias="DEFAULT_COUNTRY")
     default_city: str = Field(default="Dubai", alias="DEFAULT_CITY")

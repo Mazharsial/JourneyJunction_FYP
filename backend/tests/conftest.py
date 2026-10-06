@@ -5,6 +5,12 @@ app. Production uses PostgreSQL; the portable GUID type keeps models compatible.
 """
 from __future__ import annotations
 
+import os
+
+# Force-disable external AI in tests BEFORE app modules load settings, so the
+# suite runs offline against the grounded fallback (never the real Gemini key).
+os.environ["GEMINI_API_KEY"] = ""
+
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine

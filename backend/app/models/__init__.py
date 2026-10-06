@@ -17,6 +17,7 @@ from app.models.location import (  # noqa: F401
     Currency,
     VisaRule,
 )
+from app.models.chat import AIRequest, ChatConversation, ChatMessage  # noqa: F401
 from app.models.travel import Trip, TripItem  # noqa: F401
 from app.models.user import (  # noqa: F401
     Permission,
@@ -43,4 +44,7 @@ __all__ = [
     "AppConfig",
     "Trip",
     "TripItem",
+    "ChatConversation",
+    "ChatMessage",
+    "AIRequest",
 ]
