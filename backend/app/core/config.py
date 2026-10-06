@@ -58,6 +58,11 @@ class Settings(BaseSettings):
     rate_limit_auth_max: int = Field(default=10, alias="RATE_LIMIT_AUTH_MAX")
     rate_limit_auth_window_seconds: int = Field(default=60, alias="RATE_LIMIT_AUTH_WINDOW_SECONDS")
 
+    # ---- External travel data (Amadeus Self-Service; mock fallback if unset) ----
+    amadeus_client_id: str = Field(default="", alias="AMADEUS_CLIENT_ID")
+    amadeus_client_secret: str = Field(default="", alias="AMADEUS_CLIENT_SECRET")
+    amadeus_env: str = Field(default="test", alias="AMADEUS_ENV")
+
     # ---- Default market (seeded into DB, overridable) ----
     default_country: str = Field(default="AE", alias="DEFAULT_COUNTRY")
     default_city: str = Field(default="Dubai", alias="DEFAULT_CITY")

@@ -9,7 +9,7 @@ Each phase ends with: tests + QA + security check → update `PROJECT_CONTEXT.md
 | 2 | Design system + UI shell (tokens, brand, landing) | 🟡 In progress |
 | 3 | Foundation (repo, FastAPI+Next scaffold, DB, Docker, logging, CI) | ✅ Complete |
 | 4 | Authentication & RBAC (register/login/verify/reset, roles, JWT) | ✅ Complete |
-| 5 | Core travel (flights/hotels/itinerary via Amadeus + mock; locations/visa config) | ⬜ Next |
+| 5 | Core travel (flights/hotels/itinerary via Amadeus + mock; locations/visa config) | 🟡 Backend done; frontend planner next |
 | 6 | AI chatbot + evaluation (≥90% measured) | ⬜ |
 | 7 | OCR + document verification/correction + evaluation (≥90% measured) | ⬜ |
 | 8 | Integrations (Stripe → WhatsApp → Klaviyo) | ⬜ |

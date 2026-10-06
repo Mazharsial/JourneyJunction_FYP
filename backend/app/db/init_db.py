@@ -16,6 +16,7 @@ from app.core.logging import configure_logging, get_logger
 from app.core.rbac import Roles
 from app.core.security import hash_password
 from app.db.seed import seed_rbac
+from app.db.seed_locations import seed_locations
 from app.db.session import get_engine, get_sessionmaker
 from app.models.user import Role, User
 from app.services import auth_service
@@ -27,7 +28,8 @@ async def _run() -> None:
     sm = get_sessionmaker()
     async with sm() as session:
         await seed_rbac(session)
-        logger.info("rbac_seeded")
+        await seed_locations(session)
+        logger.info("rbac_and_locations_seeded")
 
         email = os.getenv("SUPERUSER_EMAIL")
         password = os.getenv("SUPERUSER_PASSWORD")

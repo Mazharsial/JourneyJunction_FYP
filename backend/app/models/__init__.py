@@ -10,6 +10,14 @@ from app.models.auth import (  # noqa: F401
     PasswordReset,
     RefreshToken,
 )
+from app.models.location import (  # noqa: F401
+    AppConfig,
+    City,
+    Country,
+    Currency,
+    VisaRule,
+)
+from app.models.travel import Trip, TripItem  # noqa: F401
 from app.models.user import (  # noqa: F401
     Permission,
     Role,
@@ -28,4 +36,11 @@ __all__ = [
     "RefreshToken",
     "EmailVerification",
     "PasswordReset",
+    "Currency",
+    "Country",
+    "City",
+    "VisaRule",
+    "AppConfig",
+    "Trip",
+    "TripItem",
 ]

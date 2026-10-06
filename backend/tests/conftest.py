@@ -12,6 +12,7 @@ from sqlalchemy.pool import StaticPool
 
 from app.core.rate_limit import reset_rate_limits
 from app.db.seed import seed_rbac
+from app.db.seed_locations import seed_locations
 from app.db.session import get_db
 from app.main import create_app
 from app.models import Base
@@ -29,6 +30,7 @@ async def db_engine():
     sm = async_sessionmaker(engine, expire_on_commit=False)
     async with sm() as s:
         await seed_rbac(s)
+        await seed_locations(s)
         await s.commit()
     try:
         yield engine, sm
