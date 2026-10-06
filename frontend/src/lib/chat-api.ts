@@ -9,11 +9,18 @@ export interface ChatMessageOut {
   created_at: string;
 }
 
+export interface ChatSource {
+  label: string;
+  url: string;
+}
+
 export interface ChatResponse {
   conversation_id: string;
   reply: ChatMessageOut;
   intent: string;
   status: "ok" | "fallback";
+  sources: ChatSource[];
+  suggestions: string[];
 }
 
 export const chatApi = {

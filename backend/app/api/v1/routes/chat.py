@@ -42,6 +42,8 @@ async def chat(
         reply=ChatMessageOut.model_validate(reply),
         intent=meta["intent"],
         status=meta["status"],
+        sources=meta.get("sources", []),
+        suggestions=meta.get("suggestions", []),
     )
 
 

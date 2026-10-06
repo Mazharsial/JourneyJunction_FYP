@@ -108,7 +108,10 @@ async def send_message(
         prompt_chars=len(message) + len(system_instruction), response_chars=len(answer),
     ))
     await session.flush()
-    return convo, assistant_msg, {"intent": ctx["intent"], "status": status}
+    return convo, assistant_msg, {
+        "intent": ctx["intent"], "status": status,
+        "sources": ctx.get("sources", []), "suggestions": ctx.get("suggestions", []),
+    }
 
 
 async def list_conversations(session: AsyncSession, user_id: uuid.UUID) -> list[ChatConversation]:

@@ -4,18 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { useAuth } from "@/lib/auth-context";
 import { ApiError } from "@/lib/api";
-import { chatApi } from "@/lib/chat-api";
+import { chatApi, type ChatSource } from "@/lib/chat-api";
 
 interface Msg {
   role: "user" | "assistant";
   content: string;
+  sources?: ChatSource[];
 }
 
-const SUGGESTIONS = [
+const INITIAL_SUGGESTIONS = [
   "Do I need a visa for Dubai from Pakistan?",
   "Suggest hotels in Dubai",
   "What's the best time to visit Dubai?",
-  "Help me plan a 5-day trip to Dubai",
+  "Help me plan an Umrah trip",
 ];
 
 export default function AssistantPage() {
@@ -27,29 +28,39 @@ export default function AssistantPage() {
   const [sending, setSending] = useState(false);
   const [convoId, setConvoId] = useState<string | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
+  // Follow-up questions for the most recent assistant reply.
+  const [followups, setFollowups] = useState<string[]>([]);
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, sending]);
+  }, [messages, sending, followups]);
 
   async function send(text: string) {
     const message = text.trim();
     if (!message || sending) return;
     setError(null);
     setInput("");
+    setFollowups([]);
     setMessages((m) => [...m, { role: "user", content: message }]);
     setSending(true);
     try {
       const res = await authCall((t) => chatApi.send(t, message, convoId));
       setConvoId(res.conversation_id);
-      setMessages((m) => [...m, { role: "assistant", content: res.reply.content }]);
+      setMessages((m) => [
+        ...m,
+        { role: "assistant", content: res.reply.content, sources: res.sources },
+      ]);
+      setFollowups(res.suggestions ?? []);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "The assistant is unavailable right now.");
     } finally {
       setSending(false);
     }
   }
+
+  const showInitial = messages.length <= 1;
+  const chips = showInitial ? INITIAL_SUGGESTIONS : followups;
 
   return (
     <div className="mx-auto flex h-[calc(100vh-10rem)] max-w-3xl flex-col">
@@ -60,13 +71,33 @@ export default function AssistantPage() {
         {messages.map((m, i) => (
           <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
             <div
-              className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm ${
+              className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
                 m.role === "user"
                   ? "brand-gradient text-white"
                   : "border border-border bg-surface-muted text-foreground"
               }`}
             >
-              {m.content}
+              <span className="whitespace-pre-wrap">{m.content}</span>
+              {m.role === "assistant" && m.sources && m.sources.length > 0 && (
+                <div className="mt-3 border-t border-border pt-2">
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-muted">
+                    Verify at official sources
+                  </p>
+                  <div className="mt-1.5 flex flex-wrap gap-2">
+                    {m.sources.map((s) => (
+                      <a
+                        key={s.url}
+                        href={s.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2.5 py-1 text-xs font-medium text-brand-blue hover:bg-surface-muted"
+                      >
+                        🔗 {s.label}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         ))}
@@ -82,17 +113,20 @@ export default function AssistantPage() {
         <div ref={endRef} />
       </div>
 
-      {messages.length <= 1 && (
-        <div className="mt-3 flex flex-wrap gap-2">
-          {SUGGESTIONS.map((s) => (
-            <button
-              key={s}
-              onClick={() => send(s)}
-              className="rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-muted transition hover:bg-surface-muted hover:text-foreground"
-            >
-              {s}
-            </button>
-          ))}
+      {!sending && chips.length > 0 && (
+        <div className="mt-3">
+          {!showInitial && <p className="mb-1.5 text-xs text-muted">You might also ask:</p>}
+          <div className="flex flex-wrap gap-2">
+            {chips.map((s) => (
+              <button
+                key={s}
+                onClick={() => send(s)}
+                className="rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-muted transition hover:bg-surface-muted hover:text-foreground"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 

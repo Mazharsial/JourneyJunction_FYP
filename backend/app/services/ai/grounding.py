@@ -153,7 +153,113 @@ async def build_context(session: AsyncSession, text: str) -> dict:
                 facts.append(f"Destination country: {d.name} (currency {d.currency_code}).")
 
     market = await location_service.get_default_market(session)
-    return {"intent": intent, "route": route, "facts": facts, "market": market}
+    ctx = {"intent": intent, "route": route, "facts": facts, "market": market}
+    ctx["sources"] = build_sources(ctx, text)
+    ctx["suggestions"] = build_suggestions(ctx, iso_to_country, text)
+    return ctx
+
+
+# ---- official sources + follow-up suggestions ----
+
+# Canonical official sites per country (for "verify at the source" links).
+_OFFICIAL_SOURCES = {
+    "AE": ("Official UAE visa & entry (u.ae)", "https://u.ae/en/information-and-services/visa-and-emirates-id"),
+    "SA": ("Official Saudi visa / Nusuk", "https://www.nusuk.sa"),
+    "PK": ("Official Pakistan visa (NADRA)", "https://visa.nadra.gov.pk"),
+}
+_PASSPORT_SOURCE = ("Pakistan passport (DGIP)", "https://dgip.gov.pk")
+_FLIGHT_SOURCE = ("Compare & book flights (Aviasales)", "https://www.aviasales.com")
+_HOTEL_SOURCE = ("Compare & book hotels (Booking.com)", "https://www.booking.com")
+# Representative place name per destination country for friendlier suggestions.
+_PLACE = {"AE": "Dubai", "SA": "Makkah", "PK": "Pakistan"}
+
+
+def build_sources(ctx: dict, text: str) -> list[dict]:
+    """Authentic official / booking links relevant to the answer."""
+    intent = ctx["intent"]
+    dest = ctx["route"].get("destination")
+    origin = ctx["route"].get("origin")
+    low = text.lower()
+    # "Umrah"/"Hajj" implies a Saudi destination even when none is named.
+    if "umrah" in low or "hajj" in low:
+        dest = "SA"
+        if intent == DESTINATION:
+            intent = VISA
+    out: list[dict] = []
+    seen: set[str] = set()
+
+    def add(pair):
+        label, url = pair
+        if url and url not in seen:
+            seen.add(url)
+            out.append({"label": label, "url": url})
+
+    if intent in (VISA, DESTINATION, PLAN):
+        # Destination's official entry/visa site (fall back to the default market, UAE).
+        add(_OFFICIAL_SOURCES.get(dest or "AE", _OFFICIAL_SOURCES["AE"]))
+        if origin == "PK" or dest is None:
+            add(_PASSPORT_SOURCE)
+    if intent == FLIGHT:
+        add(_FLIGHT_SOURCE)
+    if intent == HOTEL:
+        add(_HOTEL_SOURCE)
+    if intent == PLAN:
+        add(_FLIGHT_SOURCE)
+        add(_HOTEL_SOURCE)
+    return out
+
+
+def build_suggestions(ctx: dict, iso_to_country: dict, text: str) -> list[str]:
+    """Follow-up questions tailored to the intent and resolved destination."""
+    intent = ctx["intent"]
+    dest = ctx["route"].get("destination")
+    low = text.lower()
+    pilgrimage = dest == "SA" or "umrah" in low or "hajj" in low
+    place = _PLACE.get(dest, "Dubai")
+
+    if pilgrimage:
+        return [
+            "How do I apply for an Umrah visa via Nusuk?",
+            "What vaccinations are mandatory for Umrah?",
+            "Suggest hotels in Makkah",
+            "Find flights from Karachi to Jeddah",
+        ]
+    if intent == VISA:
+        country = (iso_to_country.get(dest).name if dest and iso_to_country.get(dest) else place)
+        return [
+            f"What documents do I need for {place}?",
+            f"How much does the {country} visa cost?",
+            f"How long can I stay in {place}?",
+            f"Suggest hotels in {place}",
+        ]
+    if intent == FLIGHT:
+        return [
+            f"What's the cheapest time to fly to {place}?",
+            f"Find flights from Lahore to {place}",
+            f"Suggest hotels in {place}",
+            f"Do I need a visa for {place} from Pakistan?",
+        ]
+    if intent == HOTEL:
+        return [
+            f"Suggest budget hotels in {place}",
+            f"What's the best area to stay in {place}?",
+            f"Find flights to {place}",
+            f"Help me plan a trip to {place}",
+        ]
+    if intent in (PLAN, DESTINATION):
+        return [
+            f"Do I need a visa for {place} from Pakistan?",
+            f"Suggest hotels in {place}",
+            f"What's the best time to visit {place}?",
+            f"Find flights to {place}",
+        ]
+    # greeting / out of scope
+    return [
+        "Do I need a visa for Dubai from Pakistan?",
+        "Suggest hotels in Dubai",
+        "What's the best time to visit Dubai?",
+        "Help me plan an Umrah trip",
+    ]
 
 
 VISA_DISCLAIMER = (

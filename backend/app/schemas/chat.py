@@ -21,11 +21,18 @@ class ChatMessageOut(BaseModel):
     created_at: datetime
 
 
+class ChatSource(BaseModel):
+    label: str
+    url: str
+
+
 class ChatResponse(BaseModel):
     conversation_id: uuid.UUID
     reply: ChatMessageOut
     intent: str
     status: str  # ok (Gemini) | fallback (grounded)
+    sources: list[ChatSource] = []
+    suggestions: list[str] = []
 
 
 class ConversationOut(BaseModel):
