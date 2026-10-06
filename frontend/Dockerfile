@@ -9,7 +9,9 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-ENV NEXT_TELEMETRY_DISABLED=1
+# NEXT_STANDALONE enables `output: "standalone"` (see next.config.ts) for the
+# container runtime; local `next start` leaves it off so rewrites() still apply.
+ENV NEXT_TELEMETRY_DISABLED=1 NEXT_STANDALONE=1
 RUN npm run build
 
 # ---- Stage 3: runtime ----

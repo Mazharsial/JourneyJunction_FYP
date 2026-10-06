@@ -11,7 +11,10 @@ const devAllowedOrigins = (process.env.DEV_ALLOWED_ORIGINS ?? "")
 
 const nextConfig: NextConfig = {
   // Emit a self-contained server bundle for the Docker runtime image.
-  output: "standalone",
+  // Only in standalone mode does `next start` NOT apply rewrites(), so we gate
+  // it behind NEXT_STANDALONE (set it in the Docker build) and leave it off for
+  // local `next start`, which must keep the /api/* proxy working.
+  ...(process.env.NEXT_STANDALONE ? { output: "standalone" as const } : {}),
   reactStrictMode: true,
   // Preserve trailing slashes when proxying /api/* so the backend receives the
   // exact path (e.g. /api/v1/chat/). Without this, Next normalizes the slash
