@@ -1,0 +1,63 @@
+# Render Blueprint — backend API + managed PostgreSQL (free tier).
+# Deploy: Render Dashboard → New → Blueprint → connect this repo.
+# Secrets marked `sync: false` are set once in the Render dashboard (never committed).
+services:
+  - type: web
+    name: voynixai-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: >
+      alembic upgrade head &&
+      python -m app.db.init_db &&
+      uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: SECRET_KEY
+        generateValue: true          # Render generates a strong secret
+      - key: DATABASE_URL
+        fromDatabase:
+          name: voynixai-db
+          property: connectionString
+      - key: CORS_ORIGINS
+        sync: false                   # set to your Vercel URL, e.g. https://voynixai.vercel.app
+      - key: BILLING_SUCCESS_URL
+        sync: false                   # https://<vercel-url>/dashboard/billing?status=success
+      - key: BILLING_CANCEL_URL
+        sync: false                   # https://<vercel-url>/dashboard/billing?status=cancel
+      # Integrations (optional; app runs in mock mode until set):
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: AMADEUS_CLIENT_ID
+        sync: false
+      - key: AMADEUS_CLIENT_SECRET
+        sync: false
+      - key: WHATSAPP_ACCESS_TOKEN
+        sync: false
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: KLAVIYO_API_KEY
+        sync: false
+      - key: SUPERUSER_EMAIL
+        sync: false                   # creates your admin account on first boot
+      - key: SUPERUSER_PASSWORD
+        sync: false
+
+databases:
+  - name: voynixai-db
+    plan: free
+    databaseName: voynixai
+    user: voynix
