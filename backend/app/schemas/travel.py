@@ -115,9 +115,39 @@ class VisaInfo(BaseModel):
     )
 
 
+class RequiredDocument(BaseModel):
+    """A document the traveller must carry, plus the compliance status derived
+    from the user's own verified documents."""
+    label: str
+    doc_type: str | None = None  # passport|visa|ticket|id — None = informational
+    # verified | not_verified | informational
+    status: Literal["verified", "not_verified", "informational"] = "informational"
+
+
+class TravelRequirements(BaseModel):
+    destination_country: str
+    destination_iso2: str
+    passport_validity_months: int
+    visa: VisaInfo | None = None
+    required_documents: list[RequiredDocument] = []
+    documents_ready: int = 0        # verified count among verifiable docs
+    documents_required: int = 0     # total verifiable docs (passport/visa/ticket/id)
+    health: list[str] = []
+    currency_notes: str = ""
+    customs_notes: str = ""
+    entry_notes: str = ""
+    emergency_number: str = ""
+    official_source: str = ""
+    disclaimer: str = (
+        "Travel requirements are informational only and change frequently. "
+        "Always confirm with the official embassy or government source before you travel."
+    )
+
+
 class TripDetail(BaseModel):
     trip: TripOut
     itinerary: list[ItineraryDay]
     suggested_flights: list[FlightOffer]
     suggested_hotels: list[HotelOffer]
     visa: VisaInfo | None = None
+    requirements: TravelRequirements | None = None

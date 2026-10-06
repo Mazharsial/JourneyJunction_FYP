@@ -5,7 +5,13 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Alert } from "@/components/ui/Alert";
 import { useAuth } from "@/lib/auth-context";
-import { travelApi, type TripDetail, type FlightOffer, type HotelOffer } from "@/lib/travel-api";
+import {
+  travelApi,
+  type TripDetail,
+  type FlightOffer,
+  type HotelOffer,
+  type TravelRequirements,
+} from "@/lib/travel-api";
 
 function money(amount: number, currency: string) {
   return `${currency} ${amount.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
@@ -57,6 +63,107 @@ function HotelCard({ h }: { h: HotelOffer }) {
   );
 }
 
+function InfoBlock({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-xl border border-border bg-surface p-4">
+      <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+      <div className="mt-2 text-sm text-muted">{children}</div>
+    </div>
+  );
+}
+
+function RequirementsSection({ req }: { req: TravelRequirements }) {
+  return (
+    <section>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-lg font-semibold text-foreground">
+          Travel requirements for {req.destination_country}
+        </h2>
+        {req.documents_required > 0 && (
+          <span
+            className={`rounded-full px-3 py-1 text-xs font-semibold ${
+              req.documents_ready >= req.documents_required
+                ? "bg-success/10 text-success"
+                : "bg-warning/10 text-warning"
+            }`}
+          >
+            {req.documents_ready}/{req.documents_required} documents verified
+          </span>
+        )}
+      </div>
+
+      {req.visa && (
+        <div className="mt-4">
+          <Alert tone="info">
+            <strong className="capitalize">Visa: {req.visa.requirement.replace(/_/g, " ")}</strong>
+            {req.visa.allowed_stay_days ? ` · up to ${req.visa.allowed_stay_days} days` : ""} — {req.visa.notes}
+          </Alert>
+        </div>
+      )}
+
+      <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <InfoBlock title="Required documents">
+          <ul className="space-y-2">
+            {req.required_documents.map((doc, i) => {
+              const icon =
+                doc.status === "verified" ? "✓" : doc.status === "not_verified" ? "！" : "•";
+              const color =
+                doc.status === "verified"
+                  ? "text-success"
+                  : doc.status === "not_verified"
+                  ? "text-warning"
+                  : "text-muted";
+              return (
+                <li key={i} className="flex items-start gap-2">
+                  <span className={`mt-0.5 shrink-0 font-bold ${color}`}>{icon}</span>
+                  <span className="text-foreground">
+                    {doc.label}
+                    {doc.status === "verified" && (
+                      <span className="ml-2 text-xs font-medium text-success">verified</span>
+                    )}
+                    {doc.status === "not_verified" && (
+                      <Link href="/dashboard/documents" className="ml-2 text-xs font-medium text-brand-blue hover:underline">
+                        verify now →
+                      </Link>
+                    )}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </InfoBlock>
+
+        <InfoBlock title="Passport & entry">
+          <p>Passport must be valid for at least <strong className="text-foreground">{req.passport_validity_months} months</strong> beyond arrival.</p>
+          {req.entry_notes && <p className="mt-2">{req.entry_notes}</p>}
+        </InfoBlock>
+
+        {req.health.length > 0 && (
+          <InfoBlock title="Health & vaccinations">
+            <ul className="list-disc space-y-1 pl-4">
+              {req.health.map((h, i) => <li key={i}>{h}</li>)}
+            </ul>
+          </InfoBlock>
+        )}
+
+        {req.currency_notes && <InfoBlock title="Currency & cash">{req.currency_notes}</InfoBlock>}
+        {req.customs_notes && <InfoBlock title="Customs">{req.customs_notes}</InfoBlock>}
+        {req.emergency_number && <InfoBlock title="Emergency numbers">{req.emergency_number}</InfoBlock>}
+      </div>
+
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+        {req.official_source && (
+          <a href={req.official_source} target="_blank" rel="noopener noreferrer"
+             className="text-sm font-medium text-brand-blue hover:underline">
+            Official source →
+          </a>
+        )}
+      </div>
+      <p className="mt-2 text-xs text-muted">{req.disclaimer}</p>
+    </section>
+  );
+}
+
 export default function TripDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { authCall } = useAuth();
@@ -82,7 +189,7 @@ export default function TripDetailPage() {
   }
   if (!data) return <p className="text-sm text-muted">Loading trip…</p>;
 
-  const { trip, itinerary, suggested_flights, suggested_hotels, visa } = data;
+  const { trip, itinerary, suggested_flights, suggested_hotels, visa, requirements } = data;
 
   return (
     <div className="space-y-8">
@@ -95,12 +202,16 @@ export default function TripDetailPage() {
         </p>
       </div>
 
-      {visa && (
-        <Alert tone="info">
-          <strong className="capitalize">Visa: {visa.requirement.replace(/_/g, " ")}</strong>
-          {visa.allowed_stay_days ? ` · up to ${visa.allowed_stay_days} days` : ""} — {visa.notes}
-          <span className="mt-1 block text-xs opacity-80">{visa.disclaimer}</span>
-        </Alert>
+      {requirements ? (
+        <RequirementsSection req={requirements} />
+      ) : (
+        visa && (
+          <Alert tone="info">
+            <strong className="capitalize">Visa: {visa.requirement.replace(/_/g, " ")}</strong>
+            {visa.allowed_stay_days ? ` · up to ${visa.allowed_stay_days} days` : ""} — {visa.notes}
+            <span className="mt-1 block text-xs opacity-80">{visa.disclaimer}</span>
+          </Alert>
+        )
       )}
 
       <section>

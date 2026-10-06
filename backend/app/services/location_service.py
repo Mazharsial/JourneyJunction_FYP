@@ -6,7 +6,14 @@ import uuid
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.location import AppConfig, City, Country, Currency, VisaRule
+from app.models.location import (
+    AppConfig,
+    City,
+    Country,
+    CountryRequirement,
+    Currency,
+    VisaRule,
+)
 
 
 async def list_countries(session: AsyncSession) -> list[Country]:
@@ -39,6 +46,20 @@ async def get_visa_rule(
         select(VisaRule).where(
             VisaRule.origin_iso2 == origin_iso2.upper(),
             VisaRule.destination_iso2 == destination_iso2.upper(),
+        )
+    )
+
+
+async def get_country(session: AsyncSession, iso2: str) -> Country | None:
+    return await session.scalar(select(Country).where(Country.iso2 == iso2.upper()))
+
+
+async def get_country_requirement(
+    session: AsyncSession, destination_iso2: str
+) -> CountryRequirement | None:
+    return await session.scalar(
+        select(CountryRequirement).where(
+            CountryRequirement.destination_iso2 == destination_iso2.upper()
         )
     )
 

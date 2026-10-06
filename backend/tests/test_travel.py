@@ -123,6 +123,33 @@ async def test_create_list_and_detail_trip(client):
     assert d["visa"]["requirement"] == "visa_required"  # PK -> AE
 
 
+async def test_trip_detail_includes_travel_requirements(client):
+    token = await _token(client, "reqs@example.com")
+    dest = await _city_id(client, "Dubai", "AE")
+    origin = await _city_id(client, "Lahore", "PK")
+    created = await client.post(
+        "/api/v1/trips",
+        headers=auth_header(token),
+        json={"destination_city_id": dest, "origin_city_id": origin,
+              "start_date": START, "end_date": END},
+    )
+    trip_id = created.json()["id"]
+
+    d = (await client.get(f"/api/v1/trips/{trip_id}", headers=auth_header(token))).json()
+    req = d["requirements"]
+    assert req is not None
+    assert req["destination_country"] == "United Arab Emirates"
+    assert req["passport_validity_months"] == 6
+    assert req["visa"]["requirement"] == "visa_required"
+    assert len(req["required_documents"]) >= 3
+    assert req["currency_notes"] and req["official_source"]
+    # No documents uploaded yet -> compliance shows nothing verified.
+    assert req["documents_required"] >= 1
+    assert req["documents_ready"] == 0
+    passport = next(x for x in req["required_documents"] if x["doc_type"] == "passport")
+    assert passport["status"] == "not_verified"
+
+
 async def test_trip_is_idor_safe(client):
     a_token = await _token(client, "owner@example.com")
     dest = await _city_id(client, "Dubai", "AE")

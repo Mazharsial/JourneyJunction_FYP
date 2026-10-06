@@ -69,12 +69,34 @@ export interface VisaInfo {
   notes: string;
   disclaimer: string;
 }
+export interface RequiredDocument {
+  label: string;
+  doc_type: string | null;
+  status: "verified" | "not_verified" | "informational";
+}
+export interface TravelRequirements {
+  destination_country: string;
+  destination_iso2: string;
+  passport_validity_months: number;
+  visa: VisaInfo | null;
+  required_documents: RequiredDocument[];
+  documents_ready: number;
+  documents_required: number;
+  health: string[];
+  currency_notes: string;
+  customs_notes: string;
+  entry_notes: string;
+  emergency_number: string;
+  official_source: string;
+  disclaimer: string;
+}
 export interface TripDetail {
   trip: TripOut;
   itinerary: ItineraryDay[];
   suggested_flights: FlightOffer[];
   suggested_hotels: HotelOffer[];
   visa: VisaInfo | null;
+  requirements: TravelRequirements | null;
 }
 export interface TripCreate {
   destination_city_id: string;

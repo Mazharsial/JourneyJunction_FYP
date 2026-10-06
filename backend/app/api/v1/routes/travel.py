@@ -107,7 +107,9 @@ async def get_trip(
     if not trip:
         raise AppError("Trip not found.", code="trip_not_found", status_code=404)
 
-    dest, _origin, flights, hotels, visa = await travel_service.build_detail_parts(db, trip)
+    dest, _origin, flights, hotels, visa, requirements = (
+        await travel_service.build_detail_parts(db, trip)
+    )
     itinerary = travel_service.build_itinerary(dest.name, trip.start_date, trip.end_date)
     return TripDetail(
         trip=await travel_service.to_trip_out(db, trip),
@@ -115,4 +117,5 @@ async def get_trip(
         suggested_flights=flights,
         suggested_hotels=hotels,
         visa=visa,
+        requirements=requirements,
     )

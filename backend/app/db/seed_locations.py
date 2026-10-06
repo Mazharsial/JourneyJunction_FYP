@@ -8,7 +8,14 @@ from __future__ import annotations
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.location import AppConfig, City, Country, Currency, VisaRule
+from app.models.location import (
+    AppConfig,
+    City,
+    Country,
+    CountryRequirement,
+    Currency,
+    VisaRule,
+)
 
 CURRENCIES = [
     ("AED", "UAE Dirham", "د.إ"),
@@ -47,6 +54,69 @@ VISA_RULES = [
     ("AE", "PK", "visa_required", 30, "Apply for a Pakistan visa before travelling."),
 ]
 
+# Destination entry / travel requirements (informational, demo data).
+# Keyed by destination ISO2. required_documents drives the compliance check,
+# so phrase them so a keyword (passport / visa / ticket / id) is detectable.
+COUNTRY_REQUIREMENTS = [
+    {
+        "destination_iso2": "AE",
+        "passport_validity_months": 6,
+        "required_documents": [
+            "Passport valid for at least 6 months beyond arrival",
+            "UAE tourist visa (apply before travel)",
+            "Confirmed return or onward flight ticket",
+            "Confirmed hotel booking or host details",
+            "Proof of sufficient funds for the stay",
+        ],
+        "health": [
+            "No mandatory vaccinations for most travellers.",
+            "Polio or COVID-19 certificates may be required when arriving from certain countries — check before you fly.",
+        ],
+        "currency_notes": (
+            "Local currency is the UAE Dirham (AED). Amounts of cash, or equivalent, "
+            "above AED 60,000 (about USD 16,000) must be declared on arrival."
+        ),
+        "customs_notes": (
+            "Alcohol, pork products and some prescription medicines are restricted. "
+            "Narcotics and offensive/political material are strictly prohibited."
+        ),
+        "entry_notes": (
+            "Complete immigration formalities on arrival — a biometric eye/face scan may "
+            "apply. Keep your hotel address and return ticket accessible."
+        ),
+        "emergency_number": "999 (police) · 998 (ambulance)",
+        "official_source": "https://u.ae/en/information-and-services/visa-and-emirates-id",
+    },
+    {
+        "destination_iso2": "PK",
+        "passport_validity_months": 6,
+        "required_documents": [
+            "Passport valid for at least 6 months beyond arrival",
+            "Pakistan visa or NICOP/POC (apply before travel)",
+            "Return or onward flight ticket",
+            "Proof of accommodation or host/sponsor details",
+        ],
+        "health": [
+            "A polio vaccination certificate may be required when departing Pakistan.",
+            "Hepatitis A and typhoid vaccinations are recommended.",
+        ],
+        "currency_notes": (
+            "Local currency is the Pakistani Rupee (PKR). Foreign currency above "
+            "USD 10,000 must be declared; export of PKR is restricted."
+        ),
+        "customs_notes": (
+            "Declare goods above the duty-free allowance. Narcotics, alcohol and certain "
+            "publications are prohibited."
+        ),
+        "entry_notes": (
+            "Carry your visa and sponsor/host details. Long-term visitors may need to "
+            "register with local authorities."
+        ),
+        "emergency_number": "15 (police) · 1122 (rescue/ambulance)",
+        "official_source": "https://visa.nadra.gov.pk",
+    },
+]
+
 
 async def seed_locations(session: AsyncSession) -> None:
     existing_cur = {c.code for c in (await session.scalars(select(Currency))).all()}
@@ -80,6 +150,14 @@ async def seed_locations(session: AsyncSession) -> None:
                 VisaRule(origin_iso2=origin, destination_iso2=dest, requirement=req,
                          allowed_stay_days=days, notes=notes, source=_SRC)
             )
+
+    existing_req = {
+        r.destination_iso2
+        for r in (await session.scalars(select(CountryRequirement))).all()
+    }
+    for req in COUNTRY_REQUIREMENTS:
+        if req["destination_iso2"] not in existing_req:
+            session.add(CountryRequirement(**req))
 
     if not await session.scalar(select(AppConfig).where(AppConfig.key == "default_market")):
         session.add(AppConfig(key="default_market", value={

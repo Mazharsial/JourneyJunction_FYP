@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import get_settings
 from app.core.exceptions import AppError
 from app.core.logging import get_logger
+from app.models.document import Document
 from app.models.location import City, Country
 from app.models.travel import Trip
 from app.schemas.travel import (
@@ -17,6 +18,8 @@ from app.schemas.travel import (
     FlightOffer,
     HotelOffer,
     ItineraryDay,
+    RequiredDocument,
+    TravelRequirements,
     TripCreate,
     TripItemOut,
     TripOut,
@@ -164,8 +167,91 @@ async def to_trip_out(session: AsyncSession, trip: Trip) -> TripOut:
     )
 
 
+def _doc_type_for(label: str) -> str | None:
+    """Map a required-document label to a verifiable document type (or None)."""
+    low = label.lower()
+    if "passport" in low:
+        return "passport"
+    if "visa" in low or "nicop" in low or "poc" in low:
+        return "visa"
+    if "ticket" in low or "flight" in low:
+        return "ticket"
+    if "national id" in low or "id card" in low or "identity" in low:
+        return "id"
+    return None
+
+
+async def _verified_doc_types(session: AsyncSession, user_id: uuid.UUID) -> set[str]:
+    """Document types the user has uploaded that passed verification with no errors.
+
+    A document is compliant when its latest analysis reports no error-severity
+    findings (expiry, missing fields, bad format). Warnings don't disqualify it.
+    """
+    docs = (await session.scalars(
+        select(Document).where(
+            Document.user_id == user_id, Document.status == "analyzed"
+        )
+    )).all()
+    verified: set[str] = set()
+    for d in docs:
+        if not d.analyses:
+            continue
+        latest = d.analyses[-1]
+        has_error = any(
+            (f or {}).get("severity") == "error" for f in (latest.findings or [])
+        )
+        if not has_error:
+            verified.add(d.doc_type)
+    return verified
+
+
+async def build_requirements(
+    session: AsyncSession, trip: Trip, dest: City | None, visa: VisaInfo | None
+) -> TravelRequirements | None:
+    """Assemble destination travel requirements + a document compliance check."""
+    if not dest:
+        return None
+    req = await location_service.get_country_requirement(session, dest.country_iso2)
+    if not req:
+        return None
+    country = await location_service.get_country(session, dest.country_iso2)
+    verified = await _verified_doc_types(session, trip.user_id)
+
+    documents: list[RequiredDocument] = []
+    ready = required = 0
+    for label in req.required_documents:
+        dtype = _doc_type_for(label)
+        if dtype is None:
+            documents.append(RequiredDocument(label=label, doc_type=None, status="informational"))
+            continue
+        required += 1
+        is_ok = dtype in verified
+        if is_ok:
+            ready += 1
+        documents.append(RequiredDocument(
+            label=label, doc_type=dtype,
+            status="verified" if is_ok else "not_verified",
+        ))
+
+    return TravelRequirements(
+        destination_country=country.name if country else dest.country_iso2,
+        destination_iso2=dest.country_iso2,
+        passport_validity_months=req.passport_validity_months,
+        visa=visa,
+        required_documents=documents,
+        documents_ready=ready,
+        documents_required=required,
+        health=list(req.health or []),
+        currency_notes=req.currency_notes,
+        customs_notes=req.customs_notes,
+        entry_notes=req.entry_notes,
+        emergency_number=req.emergency_number,
+        official_source=req.official_source,
+    )
+
+
 async def build_detail_parts(session: AsyncSession, trip: Trip):
-    """Return (dest_city, origin_city, suggested_flights, suggested_hotels, visa)."""
+    """Return (dest, origin, flights, hotels, visa, requirements)."""
     dest = await location_service.get_city(session, trip.destination_city_id)
     origin = (
         await location_service.get_city(session, trip.origin_city_id)
@@ -199,4 +285,5 @@ async def build_detail_parts(session: AsyncSession, trip: Trip):
                 notes=rule.notes,
             )
 
-    return dest, origin, flights, hotels, visa
+    requirements = await build_requirements(session, trip, dest, visa)
+    return dest, origin, flights, hotels, visa, requirements

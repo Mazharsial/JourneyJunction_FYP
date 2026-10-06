@@ -15,6 +15,7 @@ from app.models.location import (  # noqa: F401
     AppConfig,
     City,
     Country,
+    CountryRequirement,
     Currency,
     VisaRule,
 )
@@ -56,6 +57,7 @@ __all__ = [
     "Country",
     "City",
     "VisaRule",
+    "CountryRequirement",
     "AppConfig",
     "Trip",
     "TripItem",

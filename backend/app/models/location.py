@@ -57,6 +57,29 @@ class VisaRule(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     source: Mapped[str] = mapped_column(String(200), default="")
 
 
+class CountryRequirement(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """Destination entry / travel requirements (informational, data-driven).
+
+    Powers the "Travel requirements for <country>" section and the document
+    compliance check. destination_iso2 = ISO2 of the country being entered.
+    """
+
+    __tablename__ = "country_requirements"
+
+    destination_iso2: Mapped[str] = mapped_column(
+        String(2), unique=True, nullable=False, index=True
+    )
+    passport_validity_months: Mapped[int] = mapped_column(default=6)
+    # list[str] — each entry is a required document the traveller must carry
+    required_documents: Mapped[list] = mapped_column(JSON, default=list)
+    health: Mapped[list] = mapped_column(JSON, default=list)        # list[str]
+    currency_notes: Mapped[str] = mapped_column(String(400), default="")
+    customs_notes: Mapped[str] = mapped_column(String(400), default="")
+    entry_notes: Mapped[str] = mapped_column(String(400), default="")
+    emergency_number: Mapped[str] = mapped_column(String(60), default="")
+    official_source: Mapped[str] = mapped_column(String(200), default="")
+
+
 class AppConfig(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     """Runtime-tunable key/value configuration."""
 
