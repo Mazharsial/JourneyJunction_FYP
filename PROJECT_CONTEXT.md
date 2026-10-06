@@ -8,11 +8,11 @@
 
 ## CURRENT PROJECT STATE
 ```
-Current Phase:      Phase 4 — Authentication & RBAC (COMPLETE)
-Current Feature:    Auth (register/login/refresh/logout/verify/reset) + RBAC guards
-Last Completed:     Phase 4 auth + RBAC; 19 backend tests passing; Alembic initial migration renders valid PG DDL
-Last Successful Test: backend `pytest` 19/19 passed; frontend `npm run build` passed
-Last Git Commit:    (pending Phase 4 commit)
+Current Phase:      Phase 4 + 4b — Auth backend & frontend UI (COMPLETE)
+Current Feature:    Auth API + browser auth UI (login/register/forgot/reset + protected dashboard)
+Last Completed:     Phase 4b frontend auth UI; live backend HTTP smoke passed (register/login/me/CORS); frontend builds (7 routes)
+Last Successful Test: backend 19/19 pytest + live HTTP smoke; frontend `npm run build` passed
+Last Git Commit:    (pending Phase 4b commit; Phase 4 backend = b9d2cdf pushed)
 Current Branch:     main (develop to be created)
 Next Task:          Phase 5 — Core travel features (locations/visa config, flights/hotels via Amadeus + mock, itineraries)
 Blocked By:         Nothing. CI enabled. Docker Desktop not installed locally (only needed to RUN the full stack; migration verified via alembic offline SQL).
@@ -68,6 +68,9 @@ Chatbot: Gemini grounded on curated travel/visa KB + market config, intent detec
 
 ## UI/UX (see docs/ARCHITECTURE.md + globals.css)
 Design system from logo: deep navy (#16255C) + teal (#19B6C9) + cyan (#3DDCEB), AI accent violet (#7C5CFC). Tokens in `frontend/src/app/globals.css` (@theme). Framer Motion animations, `prefers-reduced-motion` respected. Brand centralised in `frontend/src/lib/brand.ts`. Logo SVGs in `frontend/public/brand/`.
+
+## FRONTEND AUTH (Phase 4b)
+Pages: /login, /register, /forgot-password, /reset-password, protected /dashboard (guarded by `src/app/dashboard/layout.tsx`). API client `src/lib/api.ts` (typed, parses error envelope). Auth state `src/lib/auth-context.tsx` (AuthProvider/useAuth): access token in memory, refresh token in localStorage, bootstrap via /refresh on mount, login/register/logout. UI primitives in `src/components/ui/` (Button, Input, Alert) + AuthShell. Navbar is auth-aware. Set NEXT_PUBLIC_API_BASE_URL for the backend. NOTE: refresh token in localStorage is an accepted FYP trade-off (httpOnly-cookie sessions = future hardening). Browser E2E couldn't run here (automation Chrome can't reach localhost) — verified via live backend HTTP smoke + build; run `docker compose up` or the two dev servers to view.
 
 ## SECURITY (see docs/SECURITY.md)
 Argon2 hashing, JWT (access+refresh rotation), server-side RBAC, Pydantic validation, security headers + correlation IDs (middleware), strict CORS, Redis rate limiting (P4+), file-upload hardening, PII encryption + short retention/auto-delete, Stripe/WhatsApp webhook signature verification, secrets only in `.env`, audit logs, OWASP review per phase. Gitleaks in CI.
