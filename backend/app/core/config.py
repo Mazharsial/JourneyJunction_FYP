@@ -68,6 +68,11 @@ class Settings(BaseSettings):
     gemini_model: str = Field(default="gemini-2.5-flash", alias="GEMINI_MODEL")
     ai_max_history: int = Field(default=12, alias="AI_MAX_HISTORY")  # messages of context
 
+    # ---- Documents / uploads ----
+    storage_dir: str = Field(default="storage", alias="STORAGE_DIR")
+    max_upload_mb: int = Field(default=10, alias="MAX_UPLOAD_MB")
+    document_retention_days: int = Field(default=30, alias="DOCUMENT_RETENTION_DAYS")
+
     # ---- Default market (seeded into DB, overridable) ----
     default_country: str = Field(default="AE", alias="DEFAULT_COUNTRY")
     default_city: str = Field(default="Dubai", alias="DEFAULT_CITY")

@@ -18,6 +18,12 @@ from app.models.location import (  # noqa: F401
     VisaRule,
 )
 from app.models.chat import AIRequest, ChatConversation, ChatMessage  # noqa: F401
+from app.models.document import (  # noqa: F401
+    Document,
+    DocumentAnalysis,
+    DocumentFile,
+    ExtractedField,
+)
 from app.models.travel import Trip, TripItem  # noqa: F401
 from app.models.user import (  # noqa: F401
     Permission,
@@ -47,4 +53,8 @@ __all__ = [
     "ChatConversation",
     "ChatMessage",
     "AIRequest",
+    "Document",
+    "DocumentFile",
+    "DocumentAnalysis",
+    "ExtractedField",
 ]

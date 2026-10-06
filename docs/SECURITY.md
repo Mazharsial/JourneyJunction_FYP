@@ -23,13 +23,23 @@ grows as controls are implemented; the foundation items below are already in pla
 - **Non-enumerating** password-reset request; generic login failure message.
 - All verified by 14 auth/RBAC integration tests.
 
+## Implemented (Phase 7 — document uploads, sensitive PII)
+- **Upload hardening**: size limit, extension allow-list, declared-MIME allow-list, and **magic-byte
+  content sniffing** (rejects a spoofed Content-Type). Stored filename is a UUID — the user's
+  filename never touches disk, so path traversal is impossible.
+- **Encryption at rest**: files encrypted with Fernet (AES-128-CBC + HMAC) keyed from SECRET_KEY,
+  stored outside the web root, **never served statically**; plaintext only transiently in memory.
+- **Consent required** before processing; **short retention** (`retention_until`, default 30 days).
+- **IDOR-safe** ownership on every document/analysis read + delete.
+- Rate-limited upload + AI-vision endpoints.
+
 ## Planned (by phase)
 | Control | Phase |
 |---|---|
-| IDOR ownership checks on user-owned resources | P5+ |
+| Scheduled retention cleanup job (Celery beat) for expired documents | later |
 | Redis-based distributed rate limiting + X-Forwarded-For handling | later |
 | Refresh-token reuse detection (family revocation) | later |
-| File-upload hardening (type/MIME/size/ext/filename sanitisation, stored outside webroot, signed access) | P7 |
+| Optional anti-virus scan on uploads | later |
 | PII encryption at rest + retention/auto-delete for documents | P7 |
 | Stripe + WhatsApp webhook signature verification | P8/P9 |
 | Subscription entitlement enforcement (no frontend-only gating) | P9 |

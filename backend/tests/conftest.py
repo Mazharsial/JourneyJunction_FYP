@@ -6,10 +6,14 @@ app. Production uses PostgreSQL; the portable GUID type keeps models compatible.
 from __future__ import annotations
 
 import os
+import tempfile
 
 # Force-disable external AI in tests BEFORE app modules load settings, so the
 # suite runs offline against the grounded fallback (never the real Gemini key).
 os.environ["GEMINI_API_KEY"] = ""
+# Isolate uploaded (encrypted) files to a temp dir; keep upload limit small.
+os.environ["STORAGE_DIR"] = tempfile.mkdtemp(prefix="voynix_test_storage_")
+os.environ["MAX_UPLOAD_MB"] = "2"
 
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
