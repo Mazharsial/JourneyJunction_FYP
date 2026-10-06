@@ -12,10 +12,10 @@ Current Phase:      Phase 3 — Foundation (COMPLETE); Phase 1/2 partially done 
 Current Feature:    Project scaffold (backend + frontend + devops + docs)
 Last Completed:     Foundation (backend tests green, frontend build green) + supervisor documentation (.docx)
 Last Successful Test: backend `pytest` 5/5 passed; frontend `npm run build` succeeded
-Last Git Commit:    b629dd0 (local) — PUSH PENDING user GitHub auth (see Blocked By)
+Last Git Commit:    fe2e408 — PUSHED to origin/main ✅
 Current Branch:     main (develop to be created)
 Next Task:          Phase 4 — Authentication & RBAC (users/roles/permissions, register/login/JWT)
-Blocked By:         GitHub push needs user to authenticate (Git Credential Manager). Docker Desktop not installed locally (only needed to run full stack).
+Blocked By:         Nothing. CI workflow parked at .github/ci.yml.pending — move to .github/workflows/ci.yml once the GitHub token has the `workflow` scope. Docker Desktop not installed locally (only needed to run full stack).
 Supervisor doc:     docs/VoynixAI_Project_Documentation.docx (FYP SRS/design report; open in Word and press F9 to populate the Table of Contents).
 Required Credentials (upcoming): Amadeus (P5), Gemini (P6), Stripe (P9), Meta WhatsApp + Klaviyo (P8)
 Known Issues:       npm reported transitive high-severity advisories (to review in P11 hardening)
