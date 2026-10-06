@@ -35,6 +35,8 @@ async def register(payload: RegisterRequest, db: AsyncSession = Depends(get_db))
         db, email=payload.email, password=payload.password, full_name=payload.full_name
     )
     tokens = await auth_service.issue_token_pair(db, user)
+    from app.services.notifications import notification_service
+    await notification_service.notify(db, user, "welcome", {})
     settings = get_settings()
     return RegisterResponse(
         user=auth_service.to_user_out(user),

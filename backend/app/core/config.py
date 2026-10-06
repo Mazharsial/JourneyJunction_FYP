@@ -73,6 +73,14 @@ class Settings(BaseSettings):
     max_upload_mb: int = Field(default=10, alias="MAX_UPLOAD_MB")
     document_retention_days: int = Field(default=30, alias="DOCUMENT_RETENTION_DAYS")
 
+    # ---- Messaging (mock-safe when unset) ----
+    whatsapp_access_token: str = Field(default="", alias="WHATSAPP_ACCESS_TOKEN")
+    whatsapp_phone_number_id: str = Field(default="", alias="WHATSAPP_PHONE_NUMBER_ID")
+    whatsapp_verify_token: str = Field(default="", alias="WHATSAPP_VERIFY_TOKEN")
+    whatsapp_app_secret: str = Field(default="", alias="WHATSAPP_APP_SECRET")
+    whatsapp_api_version: str = Field(default="v21.0", alias="WHATSAPP_API_VERSION")
+    klaviyo_api_key: str = Field(default="", alias="KLAVIYO_API_KEY")
+
     # ---- Stripe (test mode; mock-safe path when unset) ----
     stripe_secret_key: str = Field(default="", alias="STRIPE_SECRET_KEY")
     stripe_publishable_key: str = Field(default="", alias="STRIPE_PUBLISHABLE_KEY")

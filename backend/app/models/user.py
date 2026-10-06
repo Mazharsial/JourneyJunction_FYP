@@ -50,6 +50,10 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     full_name: Mapped[str] = mapped_column(String(120), default="")
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    # Notification profile/preferences
+    phone_number: Mapped[str] = mapped_column(String(32), default="")
+    whatsapp_opt_in: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    email_opt_in: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
 
     roles: Mapped[list[Role]] = relationship(secondary=user_roles, lazy="selectin")
 

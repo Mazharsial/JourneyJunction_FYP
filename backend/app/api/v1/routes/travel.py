@@ -79,7 +79,13 @@ async def create_trip(
     user: User = Depends(require_permissions(Perms.TRIP_MANAGE)),
 ):
     trip = await travel_service.create_trip(db, user.id, payload)
-    return await travel_service.to_trip_out(db, trip)
+    out = await travel_service.to_trip_out(db, trip)
+    from app.services.notifications import notification_service
+    await notification_service.notify(db, user, "trip_created", {
+        "destination": out.destination.name,
+        "start_date": str(out.start_date), "end_date": str(out.end_date),
+    })
+    return out
 
 
 @router.get("/trips", response_model=list[TripOut], tags=["travel"])

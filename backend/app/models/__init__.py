@@ -26,6 +26,7 @@ from app.models.billing import (  # noqa: F401
     UsageCounter,
 )
 from app.models.chat import AIRequest, ChatConversation, ChatMessage  # noqa: F401
+from app.models.notification import Notification  # noqa: F401
 from app.models.document import (  # noqa: F401
     Document,
     DocumentAnalysis,
@@ -71,4 +72,5 @@ __all__ = [
     "UsageCounter",
     "Payment",
     "AuditLog",
+    "Notification",
 ]

@@ -11,6 +11,7 @@ from app.api.v1.routes import (
     documents,
     health,
     locations,
+    notifications,
     travel,
 )
 
@@ -23,3 +24,4 @@ api_router.include_router(chat.router, prefix="/chat", tags=["chat"])
 api_router.include_router(documents.router, prefix="/documents", tags=["documents"])
 api_router.include_router(billing.router, prefix="/billing", tags=["billing"])
 api_router.include_router(admin.router, prefix="/admin", tags=["admin"])
+api_router.include_router(notifications.router, prefix="/notifications", tags=["notifications"])

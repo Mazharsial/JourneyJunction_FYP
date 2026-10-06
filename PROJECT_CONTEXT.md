@@ -8,14 +8,14 @@
 
 ## CURRENT PROJECT STATE
 ```
-Current Phase:      Phase 10 — Admin panel (COMPLETE: backend + UI)
-Current Feature:    Admin: users/roles/plans/visa/stats/audit/health + /dashboard/admin
-Last Completed:     Phase 10: admin service + endpoints (perm-gated, audited), AuditLog model/migration 0006, admin UI; 59 tests
-Last Successful Test: backend 59/59 pytest; migration 0006 OK; frontend build (15 routes)
-Last Git Commit:    (pending Phase 10 commit; Phase 9 = ee5efaf pushed)
+Current Phase:      Phase 8 — WhatsApp + Klaviyo (COMPLETE: built, mock mode)
+Current Feature:    Notifications: WhatsApp Cloud API + Klaviyo (abstraction) + prefs + webhook + settings UI
+Last Completed:     Phase 8: whatsapp_client + email_provider(Klaviyo/mock) + notification_service wired to events (welcome/trip_created/document_verified), prefs, /whatsapp/webhook, /dashboard/settings; 65 tests. Fixed structlog event= kwarg bug (stripe+email).
+Last Successful Test: backend 65/65 pytest; migration 0007 OK; frontend build (16 routes)
+Last Git Commit:    (pending Phase 8 commit; Phase 10 = 4c862ff pushed)
 Current Branch:     main (develop to be created)
-Next Task:          Phase 8 — WhatsApp (Meta) + Klaviyo email (needs keys); or Phase 11 security hardening. Phases done: 0-7,9,10.
-Blocked By:         Nothing. WhatsApp/Klaviyo keys needed for live P8.
+Next Task:          Phase 11 security hardening / Phase 12 QA / Phase 14 deployment. Phases done: 0-10.
+Blocked By:         Nothing. WhatsApp/Klaviyo run in mock mode until user adds WHATSAPP_ACCESS_TOKEN/PHONE_NUMBER_ID + KLAVIYO_API_KEY (promised in a few days). WhatsApp inbound webhook needs public URL (ngrok) + WHATSAPP_VERIFY_TOKEN/APP_SECRET.
 Supervisor doc:     docs/VoynixAI_Project_Documentation.docx (FYP SRS/design report; open in Word and press F9 to populate the Table of Contents).
 Required Credentials (upcoming): Amadeus (P5), Gemini (P6), Stripe (P9), Meta WhatsApp + Klaviyo (P8)
 Known Issues:       npm reported transitive high-severity advisories (to review in P11 hardening)
@@ -93,7 +93,8 @@ Phase 6  AI chatbot + evaluation     [COMPLETE] Gemini 2.5 Flash + grounding + k
 Phase 7  OCR + document verification [COMPLETE] hardened upload+encryption, Gemini Vision OCR+mock, validation, compliance + /dashboard/documents UI; evals 100%/100%; 46 tests
 Phase 9  Subscriptions + entitlements[COMPLETE] plans/features seed, server-side usage limits (chat+OCR), Stripe checkout/portal/webhook, billing UI; 51 tests; live Stripe verified
 Phase 10 Admin panel                 [COMPLETE] perm-gated admin: users/roles/plans/visa/stats/audit/health + UI; audit logging; 59 tests
-Phase 8  WhatsApp + Klaviyo          [PENDING]   <-- NEXT (Stripe done in P9)
+Phase 8  WhatsApp + Klaviyo          [COMPLETE] WhatsApp Cloud API + Klaviyo (abstraction) + mock fallback, notification_service wired to events, prefs + webhook + settings UI; 65 tests. Live when keys added.
+Phase 11 Security hardening          [PENDING]   <-- NEXT
 Phase 9  Subscriptions + entitlements[PENDING]
 Phase 10 Admin                       [PENDING]
 Phase 11 Security hardening          [PENDING]

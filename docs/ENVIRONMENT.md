@@ -34,7 +34,9 @@ and the backend) and `frontend/.env.example` → `frontend/.env.local`. **Never 
   - Products/prices are created automatically on first `init_db` run (idempotent via `lookup_key`).
   - **Webhooks (to auto-update plans after checkout):** run `stripe listen --forward-to localhost:8000/api/v1/billing/webhook`; it prints a `whsec_…` signing secret → put it in `STRIPE_WEBHOOK_SECRET`.
   - **Test card:** `4242 4242 4242 4242`, any future expiry, any CVC/ZIP.
-- **Meta WhatsApp:** developers.facebook.com → WhatsApp Cloud API → temp token + phone number id.
-- **Klaviyo:** Klaviyo account → private API key.
+- **Meta WhatsApp:** developers.facebook.com → your app → WhatsApp → Step 1 → **Generate token** (`WHATSAPP_ACCESS_TOKEN`, ~24h temp) + copy **Phone Number ID** (`WHATSAPP_PHONE_NUMBER_ID`); add your own number as a verified test recipient. Outbound messages work with just these. For inbound (webhook) also set `WHATSAPP_VERIFY_TOKEN` (any string) + `WHATSAPP_APP_SECRET` (App settings → Basic) and expose `/api/v1/notifications/whatsapp/webhook` publicly (e.g. ngrok).
+- **Klaviyo:** Klaviyo account → Settings → API Keys → **Private API Key** (`KLAVIYO_API_KEY`). We upsert profiles + track events; configure Klaviyo **Flows** to turn events (welcome, trip_created, document_verified) into emails.
+
+> Both WhatsApp and Klaviyo run in **mock mode** (notifications recorded but not sent) until the keys are set — the app and tests work without them.
 
 The app runs in **mock/degraded mode** when an integration key is absent, so development is never blocked.

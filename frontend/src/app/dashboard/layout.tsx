@@ -46,6 +46,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 Admin
               </Link>
             )}
+            <Link href="/dashboard/settings" className="hidden text-sm font-medium text-muted hover:text-foreground sm:inline">
+              Settings
+            </Link>
             <span className="hidden text-sm text-muted sm:inline">
               {user.full_name || user.email}
             </span>

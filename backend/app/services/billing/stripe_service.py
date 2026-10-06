@@ -172,7 +172,7 @@ async def handle_webhook(session: AsyncSession, payload: bytes, sig_header: str)
 
     etype = event["type"]
     obj = event["data"]["object"]
-    logger.info("stripe_webhook", event=etype)
+    logger.info("stripe_webhook", event_type=etype)
 
     if etype == "checkout.session.completed":
         user_id = (obj.get("metadata") or {}).get("user_id") or obj.get("client_reference_id")

@@ -33,6 +33,11 @@ async def upload_document(
         db, user_id=user.id, data=data, filename=file.filename or "document",
         content_type=file.content_type or "", doc_type=doc_type, consent=consent,
     )
+    from app.services.notifications import notification_service
+    summary = document.analyses[0].summary if document.analyses else ""
+    await notification_service.notify(db, user, "document_verified", {
+        "doc_type": document.doc_type, "summary": summary,
+    })
     return document
 
 
