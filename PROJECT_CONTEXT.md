@@ -8,14 +8,14 @@
 
 ## CURRENT PROJECT STATE
 ```
-Current Phase:      Phase 3 — Foundation (COMPLETE); Phase 1/2 partially done (docs + design tokens)
-Current Feature:    Project scaffold (backend + frontend + devops + docs)
-Last Completed:     Foundation (backend tests green, frontend build green) + supervisor documentation (.docx)
-Last Successful Test: backend `pytest` 5/5 passed; frontend `npm run build` succeeded
-Last Git Commit:    fe2e408 — PUSHED to origin/main ✅
+Current Phase:      Phase 4 — Authentication & RBAC (COMPLETE)
+Current Feature:    Auth (register/login/refresh/logout/verify/reset) + RBAC guards
+Last Completed:     Phase 4 auth + RBAC; 19 backend tests passing; Alembic initial migration renders valid PG DDL
+Last Successful Test: backend `pytest` 19/19 passed; frontend `npm run build` passed
+Last Git Commit:    (pending Phase 4 commit)
 Current Branch:     main (develop to be created)
-Next Task:          Phase 4 — Authentication & RBAC (users/roles/permissions, register/login/JWT)
-Blocked By:         Nothing. CI enabled at .github/workflows/ci.yml (token now has `workflow` scope). Docker Desktop not installed locally (only needed to run full stack).
+Next Task:          Phase 5 — Core travel features (locations/visa config, flights/hotels via Amadeus + mock, itineraries)
+Blocked By:         Nothing. CI enabled. Docker Desktop not installed locally (only needed to RUN the full stack; migration verified via alembic offline SQL).
 Supervisor doc:     docs/VoynixAI_Project_Documentation.docx (FYP SRS/design report; open in Word and press F9 to populate the Table of Contents).
 Required Credentials (upcoming): Amadeus (P5), Gemini (P6), Stripe (P9), Meta WhatsApp + Klaviyo (P8)
 Known Issues:       npm reported transitive high-severity advisories (to review in P11 hardening)
@@ -73,7 +73,10 @@ Design system from logo: deep navy (#16255C) + teal (#19B6C9) + cyan (#3DDCEB), 
 Argon2 hashing, JWT (access+refresh rotation), server-side RBAC, Pydantic validation, security headers + correlation IDs (middleware), strict CORS, Redis rate limiting (P4+), file-upload hardening, PII encryption + short retention/auto-delete, Stripe/WhatsApp webhook signature verification, secrets only in `.env`, audit logs, OWASP review per phase. Gitleaks in CI.
 
 ## TESTING & QA
-Backend: pytest (5/5 foundation tests passing — health, security headers, correlation id, OpenAPI). Frontend: next build (passing) + eslint. E2E (Playwright), AI/OCR eval suites, security tests added in later phases. CI gates on every push/PR (backend tests, frontend build, secret scan).
+Backend: pytest 19/19 passing — 5 foundation (health, headers, correlation id, OpenAPI) + 14 auth/RBAC (register, duplicate, weak-password, login success/failure, /me auth, refresh rotation + single-use reuse, logout revoke, email verify, password reset, non-enumerating reset request, rate limit 429, expired token, role + permission guards). Tests run on async SQLite (portable GUID type); production is PostgreSQL. Frontend: next build passing. E2E (Playwright), AI/OCR eval suites added in later phases. CI gates on every push/PR.
+
+## AUTH DESIGN (Phase 4)
+Argon2id password hashing (argon2-cffi) · JWT access token (HS256, 15 min, type-checked) · opaque refresh tokens (sha256-hashed in DB, rotated single-use, revocable, 7 days) · email-verification & password-reset tokens (sha256-hashed, expiring, single-use; reset revokes all refresh tokens) · RBAC via roles/permissions tables seeded from app/core/rbac.py (traveler/staff/admin/super_admin) · guards `require_roles` / `require_permissions` in app/api/deps.py (server-side) · in-memory auth rate limiter (Redis for prod). Endpoints under /api/v1/auth: register, login, refresh, logout, me, verify-email, password-reset/request, password-reset/confirm. Superuser bootstrap via env (SUPERUSER_EMAIL/PASSWORD) in app/db/init_db.py — no hardcoded creds. Known trade-offs: register returns 409 on existing email (mild enumeration, common UX); refresh reuse fails but no family-wide revocation yet.
 
 ## DEVELOPMENT PROGRESS (phase tracker)
 ```
@@ -81,8 +84,8 @@ Phase 0  Discovery & Analysis        [COMPLETE]  (approved by owner)
 Phase 1  System Architecture         [IN PROGRESS] (docs/ARCHITECTURE.md, DATABASE.md written)
 Phase 2  Design System & UI shell    [IN PROGRESS] (tokens + brand + landing page done)
 Phase 3  Project Foundation          [COMPLETE]  (backend+frontend+docker+CI+docs; tests green)
-Phase 4  Authentication & RBAC       [PENDING]   <-- NEXT
-Phase 5  Core travel features        [PENDING]
+Phase 4  Authentication & RBAC       [COMPLETE]  (register/login/refresh/logout/verify/reset, JWT+Argon2, RBAC guards, rate limit, migration; 19 tests)
+Phase 5  Core travel features        [PENDING]   <-- NEXT
 Phase 6  AI chatbot + evaluation     [PENDING]
 Phase 7  OCR + document verification [PENDING]
 Phase 8  External integrations       [PENDING]

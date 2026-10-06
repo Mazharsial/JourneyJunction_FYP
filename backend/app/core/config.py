@@ -49,6 +49,14 @@ class Settings(BaseSettings):
     jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
     access_token_expire_minutes: int = Field(default=15, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
     refresh_token_expire_days: int = Field(default=7, alias="REFRESH_TOKEN_EXPIRE_DAYS")
+    require_email_verification: bool = Field(default=False, alias="REQUIRE_EMAIL_VERIFICATION")
+    email_verification_expire_hours: int = Field(default=48, alias="EMAIL_VERIFICATION_EXPIRE_HOURS")
+    password_reset_expire_hours: int = Field(default=2, alias="PASSWORD_RESET_EXPIRE_HOURS")
+
+    # ---- Rate limiting ----
+    rate_limit_enabled: bool = Field(default=True, alias="RATE_LIMIT_ENABLED")
+    rate_limit_auth_max: int = Field(default=10, alias="RATE_LIMIT_AUTH_MAX")
+    rate_limit_auth_window_seconds: int = Field(default=60, alias="RATE_LIMIT_AUTH_WINDOW_SECONDS")
 
     # ---- Default market (seeded into DB, overridable) ----
     default_country: str = Field(default="AE", alias="DEFAULT_COUNTRY")

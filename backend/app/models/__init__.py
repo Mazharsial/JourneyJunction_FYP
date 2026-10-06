@@ -1,9 +1,31 @@
 """
 ORM models package.
 
-Import model modules here so Alembic autogenerate and `Base.metadata` discover
-them. Models are added per phase (auth → P4, travel → P5, etc.).
+Importing the model modules here ensures Alembic autogenerate and
+`Base.metadata` discover every table.
 """
 from app.db.base import Base  # noqa: F401
+from app.models.auth import (  # noqa: F401
+    EmailVerification,
+    PasswordReset,
+    RefreshToken,
+)
+from app.models.user import (  # noqa: F401
+    Permission,
+    Role,
+    User,
+    role_permissions,
+    user_roles,
+)
 
-__all__ = ["Base"]
+__all__ = [
+    "Base",
+    "User",
+    "Role",
+    "Permission",
+    "user_roles",
+    "role_permissions",
+    "RefreshToken",
+    "EmailVerification",
+    "PasswordReset",
+]

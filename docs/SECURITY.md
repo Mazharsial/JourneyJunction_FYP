@@ -14,14 +14,21 @@ grows as controls are implemented; the foundation items below are already in pla
 - **CORS**: restricted to configured origins.
 - App **boots without external services**; dependency health via `/api/v1/health/ready`.
 
+## Implemented (Phase 4 — authentication & RBAC)
+- **Argon2id** password hashing (argon2-cffi) with opportunistic rehash.
+- **JWT access tokens** (HS256, short-lived, type-checked) + **opaque refresh tokens** stored only as SHA-256 hashes, **rotated single-use** and revocable; logout and password-reset revoke them.
+- **Email verification & password reset** via SHA-256-hashed, expiring, single-use tokens.
+- **Server-side RBAC**: database-driven roles/permissions with `require_roles` / `require_permissions` guards.
+- **Rate limiting** on auth endpoints (in-memory now; Redis for production).
+- **Non-enumerating** password-reset request; generic login failure message.
+- All verified by 14 auth/RBAC integration tests.
+
 ## Planned (by phase)
 | Control | Phase |
 |---|---|
-| Argon2 password hashing | P4 |
-| JWT access + refresh-token rotation, revocation | P4 |
-| Server-side RBAC (roles/permissions) + IDOR ownership checks | P4+ |
-| Redis-based rate limiting (auth, AI, uploads) | P4 |
-| Email verification + secure password reset (hashed, expiring tokens) | P4 |
+| IDOR ownership checks on user-owned resources | P5+ |
+| Redis-based distributed rate limiting + X-Forwarded-For handling | later |
+| Refresh-token reuse detection (family revocation) | later |
 | File-upload hardening (type/MIME/size/ext/filename sanitisation, stored outside webroot, signed access) | P7 |
 | PII encryption at rest + retention/auto-delete for documents | P7 |
 | Stripe + WhatsApp webhook signature verification | P8/P9 |
