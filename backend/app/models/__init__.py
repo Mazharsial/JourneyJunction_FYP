@@ -5,6 +5,7 @@ Importing the model modules here ensures Alembic autogenerate and
 `Base.metadata` discover every table.
 """
 from app.db.base import Base  # noqa: F401
+from app.models.audit import AuditLog  # noqa: F401
 from app.models.auth import (  # noqa: F401
     EmailVerification,
     PasswordReset,
@@ -64,4 +65,10 @@ __all__ = [
     "DocumentFile",
     "DocumentAnalysis",
     "ExtractedField",
+    "Plan",
+    "PlanFeature",
+    "Subscription",
+    "UsageCounter",
+    "Payment",
+    "AuditLog",
 ]

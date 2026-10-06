@@ -8,14 +8,14 @@
 
 ## CURRENT PROJECT STATE
 ```
-Current Phase:      Phase 9 — Subscriptions & entitlements (COMPLETE: backend + billing UI)
-Current Feature:    Plans (free/pro/business) + server-side limits + Stripe checkout/portal/webhook
-Last Completed:     Phase 9 full: entitlement enforcement (chat+OCR), Stripe catalog/checkout/portal/webhook, /dashboard/billing; live Stripe verified (products + checkout session); 51 tests
-Last Successful Test: backend 51/51 pytest; live Stripe catalog+checkout OK; frontend build (14 routes); migration 0005 OK
-Last Git Commit:    (pending Phase 9 commit; Phase 7 frontend = 11f47b9 pushed)
+Current Phase:      Phase 10 — Admin panel (COMPLETE: backend + UI)
+Current Feature:    Admin: users/roles/plans/visa/stats/audit/health + /dashboard/admin
+Last Completed:     Phase 10: admin service + endpoints (perm-gated, audited), AuditLog model/migration 0006, admin UI; 59 tests
+Last Successful Test: backend 59/59 pytest; migration 0006 OK; frontend build (15 routes)
+Last Git Commit:    (pending Phase 10 commit; Phase 9 = ee5efaf pushed)
 Current Branch:     main (develop to be created)
-Next Task:          Phase 8 — WhatsApp (Meta) + Klaviyo email integrations (Stripe done). Needs WhatsApp/Klaviyo keys when live.
-Blocked By:         Nothing. Stripe test keys set + verified (prices voynix_pro/voynix_business via lookup_key). Webhook needs `stripe listen` + STRIPE_WEBHOOK_SECRET for live plan updates.
+Next Task:          Phase 8 — WhatsApp (Meta) + Klaviyo email (needs keys); or Phase 11 security hardening. Phases done: 0-7,9,10.
+Blocked By:         Nothing. WhatsApp/Klaviyo keys needed for live P8.
 Supervisor doc:     docs/VoynixAI_Project_Documentation.docx (FYP SRS/design report; open in Word and press F9 to populate the Table of Contents).
 Required Credentials (upcoming): Amadeus (P5), Gemini (P6), Stripe (P9), Meta WhatsApp + Klaviyo (P8)
 Known Issues:       npm reported transitive high-severity advisories (to review in P11 hardening)
@@ -92,6 +92,7 @@ Phase 5  Core travel features        [COMPLETE] backend (locations/visa, flight+
 Phase 6  AI chatbot + evaluation     [COMPLETE] Gemini 2.5 Flash + grounding + keyless fallback + chat UI; eval 100%/100%
 Phase 7  OCR + document verification [COMPLETE] hardened upload+encryption, Gemini Vision OCR+mock, validation, compliance + /dashboard/documents UI; evals 100%/100%; 46 tests
 Phase 9  Subscriptions + entitlements[COMPLETE] plans/features seed, server-side usage limits (chat+OCR), Stripe checkout/portal/webhook, billing UI; 51 tests; live Stripe verified
+Phase 10 Admin panel                 [COMPLETE] perm-gated admin: users/roles/plans/visa/stats/audit/health + UI; audit logging; 59 tests
 Phase 8  WhatsApp + Klaviyo          [PENDING]   <-- NEXT (Stripe done in P9)
 Phase 9  Subscriptions + entitlements[PENDING]
 Phase 10 Admin                       [PENDING]

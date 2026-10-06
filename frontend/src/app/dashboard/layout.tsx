@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/Button";
 import { brand } from "@/lib/brand";
+import { isAdmin } from "@/lib/admin-api";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
@@ -40,6 +41,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Image src={brand.logo} alt={brand.name} width={150} height={38} className="h-8 w-auto" priority />
           </Link>
           <div className="flex items-center gap-4">
+            {isAdmin(user.roles) && (
+              <Link href="/dashboard/admin" className="text-sm font-medium text-brand-blue hover:underline">
+                Admin
+              </Link>
+            )}
             <span className="hidden text-sm text-muted sm:inline">
               {user.full_name || user.email}
             </span>

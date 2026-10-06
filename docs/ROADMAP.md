@@ -14,7 +14,7 @@ Each phase ends with: tests + QA + security check → update `PROJECT_CONTEXT.md
 | 7 | OCR + document verification/correction + evaluation (≥90% measured) | ✅ Complete (backend + upload UI; 100%/100% measured) |
 | 8 | Integrations — WhatsApp + Klaviyo (Stripe done in P9) | ⬜ Next |
 | 9 | Subscriptions + enforced entitlements + usage limits | ✅ Complete (Stripe checkout/portal/webhook, server-side limits, billing UI) |
-| 10 | Admin panel | ⬜ |
+| 10 | Admin panel | ✅ Complete (users/roles/plans/visa/stats/audit/health + UI) |
 | 11 | Security hardening (OWASP, dependency audit) | ⬜ |
 | 12 | QA (unit/integration/E2E/regression) | ⬜ |
 | 13 | Performance (profiling, caching, optimisation) | ⬜ |
