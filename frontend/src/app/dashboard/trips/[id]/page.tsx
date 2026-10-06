@@ -254,6 +254,11 @@ export default function TripDetailPage() {
 
       <section>
         <h2 className="text-lg font-semibold text-foreground">Suggested hotels</h2>
+        {suggested_hotels.some((h) => h.provider === "geoapify") && (
+          <p className="mt-1 text-xs text-muted">
+            Hotel names and locations are live; prices and ratings are estimates.
+          </p>
+        )}
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {suggested_hotels.map((h, i) => <HotelCard key={i} h={h} />)}
         </div>

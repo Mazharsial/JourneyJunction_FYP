@@ -67,13 +67,14 @@ async def search_flights(*, origin_iata, destination_iata, depart_date, budget_t
 
 
 async def search_hotels(*, city_name, city_iata, checkin, checkout, budget_tier,
-                        travelers, currency) -> list[HotelOffer]:
+                        travelers, currency, latitude=None, longitude=None) -> list[HotelOffer]:
     provider = get_hotel_provider()
     offers: list[HotelOffer] = []
     try:
         offers = await provider.search_hotels(
             city_name=city_name, city_iata=city_iata, checkin=checkin, checkout=checkout,
             budget_tier=budget_tier, travelers=travelers, currency=currency,
+            latitude=latitude, longitude=longitude,
         )
     except Exception as exc:
         logger.warning("hotel_provider_fallback", provider=provider.name, error=str(exc))
@@ -301,6 +302,7 @@ async def build_detail_parts(session: AsyncSession, trip: Trip):
             city_name=dest.name, city_iata=dest.iata_code, checkin=trip.start_date,
             checkout=trip.end_date, budget_tier=trip.budget_tier,
             travelers=trip.travelers, currency=currency,
+            latitude=dest.latitude, longitude=dest.longitude,
         )
 
     visa: VisaInfo | None = None

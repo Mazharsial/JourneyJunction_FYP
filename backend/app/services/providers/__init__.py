@@ -33,11 +33,18 @@ def get_flight_provider() -> FlightProvider:
     return MockFlightProvider()
 
 
+def _geoapify_configured() -> bool:
+    return bool(get_settings().geoapify_api_key)
+
+
 def get_hotel_provider() -> HotelProvider:
-    # NOTE: Travelpayouts/Hotellook's free cached hotel-price endpoint was
-    # retired (the current Hotellook search is an async, signature-signed flow),
-    # and Amadeus self-service is gone too — so hotels use the realistic mock.
-    # TravelpayoutsHotelProvider is kept for when a working endpoint is wired.
+    # Geoapify Places gives REAL hotel names/addresses/locations (prices and
+    # ratings are estimated). Travelpayouts/Hotellook's free hotel-price endpoint
+    # was retired and Amadeus self-service is gone, so those aren't used here.
+    if _geoapify_configured():
+        from app.services.providers.geoapify import GeoapifyHotelProvider
+
+        return GeoapifyHotelProvider()
     if _amadeus_configured():
         from app.services.providers.amadeus import AmadeusHotelProvider
 
@@ -48,6 +55,14 @@ def get_hotel_provider() -> HotelProvider:
 def active_provider_name() -> str:
     if _travelpayouts_configured():
         return "travelpayouts"
+    if _amadeus_configured():
+        return "amadeus"
+    return "mock"
+
+
+def active_hotel_provider_name() -> str:
+    if _geoapify_configured():
+        return "geoapify"
     if _amadeus_configured():
         return "amadeus"
     return "mock"

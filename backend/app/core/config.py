@@ -59,9 +59,11 @@ class Settings(BaseSettings):
     rate_limit_auth_window_seconds: int = Field(default=60, alias="RATE_LIMIT_AUTH_WINDOW_SECONDS")
 
     # ---- External travel data (mock fallback if unset) ----
-    # Travelpayouts (free): flights via Aviasales, hotels via Hotellook.
+    # Travelpayouts (free): flights via Aviasales.
     travelpayouts_token: str = Field(default="", alias="TRAVELPAYOUTS_TOKEN")
     travelpayouts_marker: str = Field(default="", alias="TRAVELPAYOUTS_MARKER")
+    # Geoapify Places (free): real hotels (names/addresses/locations).
+    geoapify_api_key: str = Field(default="", alias="GEOAPIFY_API_KEY")
     # Amadeus Self-Service (legacy; self-service tier retired July 2026).
     amadeus_client_id: str = Field(default="", alias="AMADEUS_CLIENT_ID")
     amadeus_client_secret: str = Field(default="", alias="AMADEUS_CLIENT_SECRET")

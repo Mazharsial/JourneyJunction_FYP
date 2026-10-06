@@ -107,7 +107,8 @@ class AmadeusHotelProvider:
     name = "amadeus"
 
     async def search_hotels(self, *, city_name, city_iata, checkin, checkout,
-                            budget_tier, travelers, currency) -> list[HotelOffer]:
+                            budget_tier, travelers, currency,
+                            latitude=None, longitude=None) -> list[HotelOffer]:
         nights = max((checkout - checkin).days, 1)
         async with httpx.AsyncClient(timeout=15) as client:
             token = await _get_token(client)

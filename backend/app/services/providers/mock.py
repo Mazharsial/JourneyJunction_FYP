@@ -68,7 +68,8 @@ class MockHotelProvider:
     name = "mock"
 
     async def search_hotels(self, *, city_name, city_iata, checkin, checkout,
-                            budget_tier, travelers, currency) -> list[HotelOffer]:
+                            budget_tier, travelers, currency,
+                            latitude=None, longitude=None) -> list[HotelOffer]:
         _, _, nightly_base, min_rating = _TIER.get(budget_tier, _TIER["medium"])
         nights = max((checkout - checkin).days, 1)
         rng = _rng("hotel", city_name, checkin, checkout, budget_tier)

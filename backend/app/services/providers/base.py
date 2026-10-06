@@ -35,4 +35,6 @@ class HotelProvider(Protocol):
         budget_tier: str,
         travelers: int,
         currency: str,
+        latitude: float | None = None,
+        longitude: float | None = None,
     ) -> list[HotelOffer]: ...
