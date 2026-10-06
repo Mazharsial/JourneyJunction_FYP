@@ -8,9 +8,11 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
+from app.core.entitlements import Features
 from app.core.logging import get_logger
 from app.models.chat import AIRequest, ChatConversation, ChatMessage
 from app.services.ai import gemini_client, grounding
+from app.services.billing import entitlement_service
 
 logger = get_logger("chat")
 
@@ -63,6 +65,9 @@ async def send_message(
     convo = await _get_or_create_conversation(session, user_id, conversation_id)
     if convo is None:
         return None, None, None  # route -> 404
+
+    # Server-side entitlement enforcement (monthly AI message limit by plan).
+    await entitlement_service.consume(session, user_id, Features.CHATBOT_MESSAGES)
 
     ctx = await grounding.build_context(session, message)
     history = [{"role": m.role, "content": m.content} for m in convo.messages][-get_settings().ai_max_history:]

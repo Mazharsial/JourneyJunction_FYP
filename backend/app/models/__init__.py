@@ -17,6 +17,13 @@ from app.models.location import (  # noqa: F401
     Currency,
     VisaRule,
 )
+from app.models.billing import (  # noqa: F401
+    Payment,
+    Plan,
+    PlanFeature,
+    Subscription,
+    UsageCounter,
+)
 from app.models.chat import AIRequest, ChatConversation, ChatMessage  # noqa: F401
 from app.models.document import (  # noqa: F401
     Document,

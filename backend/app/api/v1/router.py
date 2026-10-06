@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from app.api.v1.routes import auth, chat, documents, health, locations, travel
+from app.api.v1.routes import auth, billing, chat, documents, health, locations, travel
 
 api_router = APIRouter()
 api_router.include_router(health.router)
@@ -12,3 +12,4 @@ api_router.include_router(locations.router, prefix="/locations", tags=["location
 api_router.include_router(travel.router)
 api_router.include_router(chat.router, prefix="/chat", tags=["chat"])
 api_router.include_router(documents.router, prefix="/documents", tags=["documents"])
+api_router.include_router(billing.router, prefix="/billing", tags=["billing"])

@@ -58,6 +58,12 @@ async def upload_and_analyze(
         doc_type = "other"
 
     mime = upload_security.validate_upload(filename, content_type, data)
+
+    # Server-side entitlement enforcement (monthly OCR document limit by plan).
+    from app.core.entitlements import Features
+    from app.services.billing import entitlement_service
+    await entitlement_service.consume(session, user_id, Features.OCR_DOCUMENTS)
+
     rel_path, sha = storage.save_encrypted(data)
 
     settings = get_settings()

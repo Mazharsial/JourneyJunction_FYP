@@ -11,6 +11,7 @@ const tiles: Tile[] = [
   { title: "My trips", body: "View and manage your saved trips.", href: "/dashboard/trips" },
   { title: "AI assistant", body: "Ask about visas, routes and requirements.", href: "/dashboard/assistant" },
   { title: "Verify documents", body: "Upload a passport or visa form for AI checks.", href: "/dashboard/documents" },
+  { title: "Subscription", body: "View your plan, usage and upgrade options.", href: "/dashboard/billing" },
 ];
 
 export default function DashboardHome() {

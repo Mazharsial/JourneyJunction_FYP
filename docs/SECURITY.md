@@ -33,6 +33,14 @@ grows as controls are implemented; the foundation items below are already in pla
 - **IDOR-safe** ownership on every document/analysis read + delete.
 - Rate-limited upload + AI-vision endpoints.
 
+## Implemented (Phase 9 — billing)
+- **Server-side entitlement enforcement**: AI messages and OCR documents are gated by the user's
+  plan and monthly usage **in the backend** (402/403), not just hidden in the UI — a direct API
+  call by a free user past their limit is rejected.
+- **Stripe webhook signature verification** (`stripe.Webhook.construct_event` + `STRIPE_WEBHOOK_SECRET`);
+  unsigned/invalid events are rejected (400).
+- Secret key never exposed to the frontend (only the publishable key is).
+
 ## Planned (by phase)
 | Control | Phase |
 |---|---|

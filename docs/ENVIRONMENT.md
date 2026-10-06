@@ -30,7 +30,10 @@ and the backend) and `frontend/.env.example` → `frontend/.env.local`. **Never 
 ## Getting the free credentials (when each phase needs them)
 - **Gemini:** Google AI Studio → API key (free tier).
 - **Amadeus:** developers.amadeus.com → Self-Service app → test API key/secret (free).
-- **Stripe:** dashboard.stripe.com (test mode) → secret + webhook signing secret + price IDs.
+- **Stripe:** dashboard.stripe.com (test mode) → `STRIPE_SECRET_KEY` + `STRIPE_PUBLISHABLE_KEY`.
+  - Products/prices are created automatically on first `init_db` run (idempotent via `lookup_key`).
+  - **Webhooks (to auto-update plans after checkout):** run `stripe listen --forward-to localhost:8000/api/v1/billing/webhook`; it prints a `whsec_…` signing secret → put it in `STRIPE_WEBHOOK_SECRET`.
+  - **Test card:** `4242 4242 4242 4242`, any future expiry, any CVC/ZIP.
 - **Meta WhatsApp:** developers.facebook.com → WhatsApp Cloud API → temp token + phone number id.
 - **Klaviyo:** Klaviyo account → private API key.
 

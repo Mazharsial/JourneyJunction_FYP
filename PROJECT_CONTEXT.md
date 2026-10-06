@@ -8,14 +8,14 @@
 
 ## CURRENT PROJECT STATE
 ```
-Current Phase:      Phase 7 — OCR & document verification (COMPLETE: backend + upload UI)
-Current Feature:    /dashboard/documents upload + results (fields, findings, compliance)
-Last Completed:     Phase 7 frontend upload UI; backend 1ddf5d7 pushed; 46 tests; evals 100%/100%; live passport e2e OK
-Last Successful Test: backend 46/46 pytest; validation 100%, OCR 100% live; frontend build (13 routes)
-Last Git Commit:    (pending Phase 7 frontend commit; Phase 7 backend = 1ddf5d7 pushed)
+Current Phase:      Phase 9 — Subscriptions & entitlements (COMPLETE: backend + billing UI)
+Current Feature:    Plans (free/pro/business) + server-side limits + Stripe checkout/portal/webhook
+Last Completed:     Phase 9 full: entitlement enforcement (chat+OCR), Stripe catalog/checkout/portal/webhook, /dashboard/billing; live Stripe verified (products + checkout session); 51 tests
+Last Successful Test: backend 51/51 pytest; live Stripe catalog+checkout OK; frontend build (14 routes); migration 0005 OK
+Last Git Commit:    (pending Phase 9 commit; Phase 7 frontend = 11f47b9 pushed)
 Current Branch:     main (develop to be created)
-Next Task:          Phase 8 — External integrations (Stripe -> WhatsApp -> Klaviyo); or Phase 9 subscriptions. Needs Stripe/WhatsApp/Klaviyo keys when live.
-Blocked By:         Nothing. Gemini + Amadeus(optional) handled. Stripe/WhatsApp/Klaviyo keys needed for live P8/P9.
+Next Task:          Phase 8 — WhatsApp (Meta) + Klaviyo email integrations (Stripe done). Needs WhatsApp/Klaviyo keys when live.
+Blocked By:         Nothing. Stripe test keys set + verified (prices voynix_pro/voynix_business via lookup_key). Webhook needs `stripe listen` + STRIPE_WEBHOOK_SECRET for live plan updates.
 Supervisor doc:     docs/VoynixAI_Project_Documentation.docx (FYP SRS/design report; open in Word and press F9 to populate the Table of Contents).
 Required Credentials (upcoming): Amadeus (P5), Gemini (P6), Stripe (P9), Meta WhatsApp + Klaviyo (P8)
 Known Issues:       npm reported transitive high-severity advisories (to review in P11 hardening)
@@ -91,7 +91,8 @@ Phase 4  Authentication & RBAC       [COMPLETE]  (register/login/refresh/logout/
 Phase 5  Core travel features        [COMPLETE] backend (locations/visa, flight+hotel search mock+Amadeus, trips IDOR-safe, itinerary; 29 tests) + planner UI (/dashboard/plan, /trips, /trips/[id])
 Phase 6  AI chatbot + evaluation     [COMPLETE] Gemini 2.5 Flash + grounding + keyless fallback + chat UI; eval 100%/100%
 Phase 7  OCR + document verification [COMPLETE] hardened upload+encryption, Gemini Vision OCR+mock, validation, compliance + /dashboard/documents UI; evals 100%/100%; 46 tests
-Phase 8  External integrations       [PENDING]   <-- NEXT
+Phase 9  Subscriptions + entitlements[COMPLETE] plans/features seed, server-side usage limits (chat+OCR), Stripe checkout/portal/webhook, billing UI; 51 tests; live Stripe verified
+Phase 8  WhatsApp + Klaviyo          [PENDING]   <-- NEXT (Stripe done in P9)
 Phase 9  Subscriptions + entitlements[PENDING]
 Phase 10 Admin                       [PENDING]
 Phase 11 Security hardening          [PENDING]

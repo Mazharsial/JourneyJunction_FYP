@@ -12,8 +12,8 @@ Each phase ends with: tests + QA + security check → update `PROJECT_CONTEXT.md
 | 5 | Core travel (flights/hotels/itinerary via Amadeus + mock; locations/visa config) | ✅ Complete (backend + planner UI) |
 | 6 | AI chatbot + evaluation (≥90% measured) | ✅ Complete (backend + chat UI; 100%/100% measured) |
 | 7 | OCR + document verification/correction + evaluation (≥90% measured) | ✅ Complete (backend + upload UI; 100%/100% measured) |
-| 8 | Integrations (Stripe → WhatsApp → Klaviyo) | ⬜ Next |
-| 9 | Subscriptions + enforced entitlements + usage limits | ⬜ |
+| 8 | Integrations — WhatsApp + Klaviyo (Stripe done in P9) | ⬜ Next |
+| 9 | Subscriptions + enforced entitlements + usage limits | ✅ Complete (Stripe checkout/portal/webhook, server-side limits, billing UI) |
 | 10 | Admin panel | ⬜ |
 | 11 | Security hardening (OWASP, dependency audit) | ⬜ |
 | 12 | QA (unit/integration/E2E/regression) | ⬜ |

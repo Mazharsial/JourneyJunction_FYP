@@ -16,6 +16,7 @@ from app.core.logging import configure_logging, get_logger
 from app.core.rbac import Roles
 from app.core.security import hash_password
 from app.db.seed import seed_rbac
+from app.db.seed_billing import seed_billing
 from app.db.seed_locations import seed_locations
 from app.db.session import get_engine, get_sessionmaker
 from app.models.user import Role, User
@@ -29,7 +30,17 @@ async def _run() -> None:
     async with sm() as session:
         await seed_rbac(session)
         await seed_locations(session)
-        logger.info("rbac_and_locations_seeded")
+        await seed_billing(session)
+        logger.info("rbac_locations_billing_seeded")
+
+        # Create Stripe products/prices for paid plans when a key is configured.
+        from app.services.billing import stripe_service
+        if stripe_service.is_configured():
+            try:
+                result = await stripe_service.create_catalog(session)
+                logger.info("stripe_catalog", result=result)
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("stripe_catalog_failed", error=str(exc))
 
         email = os.getenv("SUPERUSER_EMAIL")
         password = os.getenv("SUPERUSER_PASSWORD")

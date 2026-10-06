@@ -73,6 +73,13 @@ class Settings(BaseSettings):
     max_upload_mb: int = Field(default=10, alias="MAX_UPLOAD_MB")
     document_retention_days: int = Field(default=30, alias="DOCUMENT_RETENTION_DAYS")
 
+    # ---- Stripe (test mode; mock-safe path when unset) ----
+    stripe_secret_key: str = Field(default="", alias="STRIPE_SECRET_KEY")
+    stripe_publishable_key: str = Field(default="", alias="STRIPE_PUBLISHABLE_KEY")
+    stripe_webhook_secret: str = Field(default="", alias="STRIPE_WEBHOOK_SECRET")
+    billing_success_url: str = Field(default="http://localhost:3000/dashboard/billing?status=success", alias="BILLING_SUCCESS_URL")
+    billing_cancel_url: str = Field(default="http://localhost:3000/dashboard/billing?status=cancel", alias="BILLING_CANCEL_URL")
+
     # ---- Default market (seeded into DB, overridable) ----
     default_country: str = Field(default="AE", alias="DEFAULT_COUNTRY")
     default_city: str = Field(default="Dubai", alias="DEFAULT_CITY")

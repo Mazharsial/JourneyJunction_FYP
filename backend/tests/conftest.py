@@ -8,9 +8,11 @@ from __future__ import annotations
 import os
 import tempfile
 
-# Force-disable external AI in tests BEFORE app modules load settings, so the
-# suite runs offline against the grounded fallback (never the real Gemini key).
+# Force-disable external services in tests BEFORE app modules load settings, so
+# the suite runs fully offline (never hitting the real Gemini/Stripe keys).
 os.environ["GEMINI_API_KEY"] = ""
+os.environ["STRIPE_SECRET_KEY"] = ""
+os.environ["STRIPE_WEBHOOK_SECRET"] = ""
 # Isolate uploaded (encrypted) files to a temp dir; keep upload limit small.
 os.environ["STORAGE_DIR"] = tempfile.mkdtemp(prefix="voynix_test_storage_")
 os.environ["MAX_UPLOAD_MB"] = "2"
@@ -22,6 +24,7 @@ from sqlalchemy.pool import StaticPool
 
 from app.core.rate_limit import reset_rate_limits
 from app.db.seed import seed_rbac
+from app.db.seed_billing import seed_billing
 from app.db.seed_locations import seed_locations
 from app.db.session import get_db
 from app.main import create_app
@@ -41,6 +44,7 @@ async def db_engine():
     async with sm() as s:
         await seed_rbac(s)
         await seed_locations(s)
+        await seed_billing(s)
         await s.commit()
     try:
         yield engine, sm
