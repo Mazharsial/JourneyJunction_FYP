@@ -41,6 +41,26 @@ grows as controls are implemented; the foundation items below are already in pla
   unsigned/invalid events are rejected (400).
 - Secret key never exposed to the frontend (only the publishable key is).
 
+## Phase 11 — Security hardening & dependency audit
+**Dependency vulnerability scan** (now run in CI on every push):
+- **Backend (`pip-audit`):** found CVEs in `pillow`, `pyjwt`, `cryptography`, `python-multipart`,
+  `starlette`, `pytest`. **Fixed** by upgrading (fastapi 0.115→0.142, starlette 0.41→1.7, pyjwt
+  2.10→2.15, cryptography 44→50, Pillow 11.1→12.3, python-multipart 0.0.20→0.0.31, pytest 8→9).
+  → **`pip-audit`: no known vulnerabilities.** All 65 tests still pass after the upgrade.
+- **Frontend (`npm audit`):** 5 high advisories, all in one **dev-only** chain
+  (`braces`→`micromatch`→`fast-glob`→`@next/eslint-plugin-next`→`eslint-config-next`). `micromatch`
+  and `braces` forced to latest via `overrides`. The remaining `braces` advisory (stack-exhaustion
+  DoS, range `<=3.0.3`) has **no published fix** and is **dev-tooling only** — it runs the linter on
+  our own source paths at build time, is never in the shipped runtime bundle, and is not
+  attacker-reachable in production. **Accepted risk**; CI audits production deps (`--omit=dev`).
+
+**OWASP review (self-audit):** SQLi (ORM/parameterized ✓), XSS (output-encoded + CSP ✓), authn/z
+(Argon2 + JWT + server-side RBAC ✓), IDOR (ownership checks across trips/documents/chat/subscriptions
+✓), broken access control (entitlements enforced server-side ✓), security misconfig (headers + CORS +
+no secrets committed + gitleaks ✓), sensitive data (PII encryption + retention ✓), SSRF (only
+first-party outbound to Gemini/Stripe/Meta/Klaviyo ✓), components with known vulns (fixed above ✓),
+upload abuse (type/MIME/magic/size + UUID names ✓), rate-limit abuse (auth/AI/upload limited ✓).
+
 ## Planned (by phase)
 | Control | Phase |
 |---|---|
