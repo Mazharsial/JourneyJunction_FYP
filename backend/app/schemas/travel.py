@@ -129,6 +129,14 @@ class RequiredDocument(BaseModel):
     status: Literal["verified", "not_verified", "informational"] = "informational"
 
 
+class VisaType(BaseModel):
+    name: str
+    duration: str = ""
+    fee: str = ""
+    entry: str = ""
+    notes: str = ""
+
+
 class PreparationStep(BaseModel):
     title: str
     detail: str = ""
@@ -142,6 +150,7 @@ class TravelRequirements(BaseModel):
     destination_iso2: str
     purpose: str = "tourism"
     passport_validity_months: int
+    visa_types: list[VisaType] = []
     preparation: list[PreparationStep] = []
     visa: VisaInfo | None = None
     required_documents: list[RequiredDocument] = []

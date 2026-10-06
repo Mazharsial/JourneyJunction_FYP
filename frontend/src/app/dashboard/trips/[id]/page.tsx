@@ -170,6 +170,38 @@ function RequirementsSection({ req }: { req: TravelRequirements }) {
         {req.emergency_number && <InfoBlock title="Emergency numbers">{req.emergency_number}</InfoBlock>}
       </div>
 
+      {req.visa_types.length > 0 && (
+        <div className="mt-6">
+          <h3 className="text-base font-semibold text-foreground">Visa types & routes</h3>
+          <p className="mt-1 text-xs text-muted">
+            Available visa options for this destination. Fees are indicative — confirm at the official link below.
+          </p>
+          <div className="mt-4 grid gap-3 md:grid-cols-2">
+            {req.visa_types.map((v, i) => (
+              <div key={i} className="rounded-xl border border-border bg-surface p-4">
+                <div className="flex items-start justify-between gap-2">
+                  <h4 className="text-sm font-semibold text-foreground">{v.name}</h4>
+                  {v.fee && (
+                    <span className="shrink-0 rounded-full bg-teal/10 px-2.5 py-0.5 text-xs font-semibold text-teal">
+                      {v.fee}
+                    </span>
+                  )}
+                </div>
+                <div className="mt-1.5 flex flex-wrap gap-2">
+                  {v.duration && (
+                    <span className="rounded-full bg-surface-muted px-2.5 py-0.5 text-xs text-muted">⏳ {v.duration}</span>
+                  )}
+                  {v.entry && (
+                    <span className="rounded-full bg-surface-muted px-2.5 py-0.5 text-xs text-muted">🎟 {v.entry}</span>
+                  )}
+                </div>
+                {v.notes && <p className="mt-2 text-sm text-muted">{v.notes}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {req.preparation.length > 0 && (
         <div className="mt-6">
           <h3 className="text-base font-semibold text-foreground">How to prepare — step by step</h3>

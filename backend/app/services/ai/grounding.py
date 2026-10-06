@@ -135,6 +135,11 @@ async def build_context(session: AsyncSession, text: str) -> dict:
 
     if intent in (VISA, FLIGHT, HOTEL, PLAN, DESTINATION):
         origin, dest = _extract_route(text, name_to_iso, city_to_iso)
+        low = text.lower()
+        purpose = "hajj" if "hajj" in low else ("umrah" if "umrah" in low else "tourism")
+        # "Umrah"/"Hajj" implies a Saudi destination even when none is named.
+        if dest is None and purpose in ("umrah", "hajj"):
+            dest = "SA"
         route = {"origin": origin, "destination": dest}
         if intent == VISA and origin and dest and origin != dest:
             rule = await location_service.get_visa_rule(session, origin, dest)
@@ -151,6 +156,26 @@ async def build_context(session: AsyncSession, text: str) -> dict:
             d = iso_to_country.get(dest)
             if d:
                 facts.append(f"Destination country: {d.name} (currency {d.currency_code}).")
+            # Rich grounding: visa types, documents, health from the knowledge base.
+            if intent in (VISA, PLAN, DESTINATION):
+                req = await location_service.get_country_requirement(session, dest, purpose)
+                if req:
+                    dname = d.name if d else dest
+                    for vt in (req.visa_types or []):
+                        facts.append(
+                            f"Visa option for {dname} ({purpose}): {vt.get('name','')} — "
+                            f"{vt.get('duration','')}; fee {vt.get('fee','')}; {vt.get('entry','')}. "
+                            f"{vt.get('notes','')}".strip()
+                        )
+                    facts.append(
+                        f"Passport must be valid for at least {req.passport_validity_months} months beyond arrival."
+                    )
+                    if req.required_documents:
+                        facts.append("Required documents: " + "; ".join(req.required_documents))
+                    if req.health:
+                        facts.append("Health requirements: " + "; ".join(req.health))
+                    if req.official_source:
+                        facts.append(f"Official source: {req.official_source}")
 
     market = await location_service.get_default_market(session)
     ctx = {"intent": intent, "route": route, "facts": facts, "market": market}
@@ -269,22 +294,30 @@ VISA_DISCLAIMER = (
 
 
 def grounded_fallback(text: str, ctx: dict) -> str:
-    """Keyless answer composed from verified facts (used when Gemini is unavailable)."""
+    """Keyless answer composed from verified facts (used when Gemini is unavailable).
+
+    Presents the full grounded knowledge (visa rule, visa options, documents,
+    health, official source) so the assistant stays genuinely useful even when
+    the AI provider is rate-limited or down.
+    """
     intent = ctx["intent"]
     facts = ctx["facts"]
     if intent == GREETING:
         return "Hello! I'm your Journey Junction travel assistant. Ask me about visas, flights, hotels or planning a trip."
-    if intent == VISA:
-        if facts:
-            return f"{facts[0]}\n\n{VISA_DISCLAIMER}"
-        return ("I don't have a verified visa rule for that exact route yet. Please check the "
-                "destination country's official immigration website. " + VISA_DISCLAIMER)
     if intent == OUT_OF_SCOPE:
         return ("I'm a travel assistant, so I can help with destinations, flights, hotels, "
                 "itineraries and visa guidance. Could you ask me something travel-related?")
     if facts:
-        return "Here's what I can tell you:\n- " + "\n- ".join(facts) + (
-            f"\n\n{VISA_DISCLAIMER}" if intent == VISA else ""
-        )
+        header = {
+            VISA: "Here are the visa options and requirements I have:",
+            PLAN: "Here's what you'll need for this trip:",
+            DESTINATION: "Here's what I can tell you:",
+        }.get(intent, "Here's what I can tell you:")
+        body = "\n".join(f"• {f}" for f in facts)
+        tail = f"\n\n{VISA_DISCLAIMER}" if intent in (VISA, PLAN, DESTINATION) else ""
+        return f"{header}\n\n{body}{tail}"
+    if intent == VISA:
+        return ("I don't have a verified visa rule for that exact route yet. Please check the "
+                "destination country's official immigration website. " + VISA_DISCLAIMER)
     return ("I can help you plan trips — try asking about flights, hotels, a destination, or "
             "whether you need a visa for a specific route.")

@@ -69,6 +69,54 @@ VISA_RULES = [
 ]
 
 # ---------------------------------------------------------------------------
+# Visa types / routes per destination & purpose (from Pakistan).
+# Researched from current 2026 guidance — indicative, verify at official links.
+# ---------------------------------------------------------------------------
+_VISA_TYPES_AE = [
+    {"name": "30-day tourist visa", "duration": "30 days stay",
+     "fee": "≈ AED 252 + 5% VAT", "entry": "single or multiple entry",
+     "notes": "Most common for short visits; apply via an airline, hotel or licensed agent. Approval usually 3–7 working days."},
+    {"name": "60-day tourist visa", "duration": "60 days stay",
+     "fee": "≈ AED 352 + 5% VAT", "entry": "single or multiple entry",
+     "notes": "For longer visits."},
+    {"name": "5-year multiple-entry tourist visa", "duration": "up to 90 days per visit (5-year validity)",
+     "fee": "varies", "entry": "multiple entry",
+     "notes": "Opened to Pakistani nationals in 2025. No local sponsor needed; show proof of funds (about USD 4,000)."},
+    {"name": "Transit visa", "duration": "48 or 96 hours",
+     "fee": "48h free / 96h ≈ AED 50", "entry": "single",
+     "notes": "For short layovers. Note: ordinary Pakistani passports have no visa-on-arrival — arrange a visa before travel."},
+]
+_VISA_TYPES_SA_TOURISM = [
+    {"name": "Tourist eVisa", "duration": "up to 90 days per visit (1-year multiple entry)",
+     "fee": "≈ SAR 480 (incl. insurance)", "entry": "multiple entry",
+     "notes": "Allows tourism and Umrah outside the Hajj season. IMPORTANT: Pakistani passport holders are generally NOT on the tourist eVisa eligible list — use the Umrah visa route instead."},
+    {"name": "Transit / stopover visa", "duration": "up to 96 hours",
+     "fee": "visa free (processing ≈ SAR 39.5 + insurance ≈ SAR 13)", "entry": "multiple within 3 months",
+     "notes": "For Saudia/flynas transits; Umrah is permitted during its validity."},
+]
+_VISA_TYPES_SA_UMRAH = [
+    {"name": "Umrah visa", "duration": "up to 90 days stay (must enter within 30 days of issuance)",
+     "fee": "from ≈ SAR 300 (varies by package)", "entry": "single entry",
+     "notes": "The primary route for Pakistani pilgrims. Requires a sponsored package with pre-booked Makkah/Madinah hotels and transport, applied through a licensed agent via the Nusuk / Masar system. Nusuk is mandatory for all pilgrims."},
+    {"name": "Tourist eVisa (if eligible)", "duration": "90 days per visit",
+     "fee": "≈ SAR 480", "entry": "multiple entry",
+     "notes": "Permits Umrah outside the Hajj season, but Pakistani passport holders are generally not eligible — most use the Umrah visa."},
+]
+_VISA_TYPES_SA_HAJJ = [
+    {"name": "Hajj visa", "duration": "valid for the Hajj season only",
+     "fee": "included in the Hajj package", "entry": "single entry",
+     "notes": "Quota-based, issued only via the Nusuk Hajj platform or an approved operator. A tourist, Umrah or transit visa is NOT valid for Hajj."},
+]
+_VISA_TYPES_PK = [
+    {"name": "Tourist eVisa", "duration": "up to 90 days",
+     "fee": "USD 8–60 (nationality dependent)", "entry": "single/multiple",
+     "notes": "Apply online via the NADRA visa portal."},
+    {"name": "NICOP / POC", "duration": "long-term",
+     "fee": "varies", "entry": "multiple entry",
+     "notes": "For overseas Pakistanis and persons of Pakistani origin — no separate visa needed."},
+]
+
+# ---------------------------------------------------------------------------
 # Step-by-step preparation guides (from Pakistan). Each step:
 # {title, detail, url (official source), fee, timeline}. Fees/timelines are
 # indicative demo values — always verify with the linked official source.
@@ -179,6 +227,7 @@ COUNTRY_REQUIREMENTS = [
         "destination_iso2": "AE",
         "purpose": "tourism",
         "preparation": _PREP_AE_TOURISM,
+        "visa_types": _VISA_TYPES_AE,
         "passport_validity_months": 6,
         "required_documents": [
             "Passport valid for at least 6 months beyond arrival",
@@ -210,6 +259,7 @@ COUNTRY_REQUIREMENTS = [
         "destination_iso2": "PK",
         "purpose": "tourism",
         "preparation": _PREP_PK,
+        "visa_types": _VISA_TYPES_PK,
         "passport_validity_months": 6,
         "required_documents": [
             "Passport valid for at least 6 months beyond arrival",
@@ -241,6 +291,7 @@ COUNTRY_REQUIREMENTS = [
         "destination_iso2": "SA",
         "purpose": "tourism",
         "preparation": _PREP_SA_TOURISM,
+        "visa_types": _VISA_TYPES_SA_TOURISM,
         "passport_validity_months": 6,
         "required_documents": [
             "Passport valid for at least 6 months beyond arrival",
@@ -273,6 +324,7 @@ COUNTRY_REQUIREMENTS = [
         "destination_iso2": "SA",
         "purpose": "umrah",
         "preparation": _PREP_SA_UMRAH,
+        "visa_types": _VISA_TYPES_SA_UMRAH,
         "passport_validity_months": 6,
         "required_documents": [
             "Passport valid for at least 6 months beyond arrival",
@@ -309,6 +361,7 @@ COUNTRY_REQUIREMENTS = [
         "destination_iso2": "SA",
         "purpose": "hajj",
         "preparation": _PREP_SA_HAJJ,
+        "visa_types": _VISA_TYPES_SA_HAJJ,
         "passport_validity_months": 6,
         "required_documents": [
             "Passport valid for at least 6 months beyond arrival",

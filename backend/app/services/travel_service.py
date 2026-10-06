@@ -266,6 +266,7 @@ async def build_requirements(
         destination_iso2=dest.country_iso2,
         purpose=trip.purpose,
         passport_validity_months=req.passport_validity_months,
+        visa_types=list(req.visa_types or []),
         preparation=list(req.preparation or []),
         visa=visa,
         required_documents=documents,

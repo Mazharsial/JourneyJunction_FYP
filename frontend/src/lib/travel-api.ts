@@ -77,6 +77,13 @@ export interface RequiredDocument {
   doc_type: string | null;
   status: "verified" | "not_verified" | "informational";
 }
+export interface VisaType {
+  name: string;
+  duration: string;
+  fee: string;
+  entry: string;
+  notes: string;
+}
 export interface PreparationStep {
   title: string;
   detail: string;
@@ -89,6 +96,7 @@ export interface TravelRequirements {
   destination_iso2: string;
   purpose: string;
   passport_validity_months: number;
+  visa_types: VisaType[];
   preparation: PreparationStep[];
   visa: VisaInfo | null;
   required_documents: RequiredDocument[];

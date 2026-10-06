@@ -73,6 +73,8 @@ class CountryRequirement(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     # tourism | umrah | hajj — lets one country carry pilgrimage-specific rules
     purpose: Mapped[str] = mapped_column(String(20), default="tourism", nullable=False)
     passport_validity_months: Mapped[int] = mapped_column(default=6)
+    # list[{name, duration, fee, entry, notes}] — available visa types/routes
+    visa_types: Mapped[list] = mapped_column(JSON, default=list)
     # list[str] — each entry is a required document the traveller must carry
     required_documents: Mapped[list] = mapped_column(JSON, default=list)
     health: Mapped[list] = mapped_column(JSON, default=list)        # list[str]
