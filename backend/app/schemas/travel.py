@@ -24,6 +24,7 @@ class FlightOffer(BaseModel):
     cabin: str
     price_amount: float
     price_currency: str
+    booking_url: str = ""
 
 
 class HotelOffer(BaseModel):
@@ -36,6 +37,7 @@ class HotelOffer(BaseModel):
     price_per_night: float
     total_amount: float
     price_currency: str
+    booking_url: str = ""
 
 
 class FlightSearchResponse(BaseModel):
@@ -127,11 +129,20 @@ class RequiredDocument(BaseModel):
     status: Literal["verified", "not_verified", "informational"] = "informational"
 
 
+class PreparationStep(BaseModel):
+    title: str
+    detail: str = ""
+    url: str = ""       # official source to verify
+    fee: str = ""       # indicative cost
+    timeline: str = ""  # indicative duration
+
+
 class TravelRequirements(BaseModel):
     destination_country: str
     destination_iso2: str
     purpose: str = "tourism"
     passport_validity_months: int
+    preparation: list[PreparationStep] = []
     visa: VisaInfo | None = None
     required_documents: list[RequiredDocument] = []
     documents_ready: int = 0        # verified count among verifiable docs

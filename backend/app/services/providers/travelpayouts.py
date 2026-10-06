@@ -19,6 +19,7 @@ import httpx
 from app.core.config import get_settings
 from app.core.logging import get_logger
 from app.schemas.travel import FlightOffer, HotelOffer
+from app.services.providers.booking_links import aviasales_from_link
 
 logger = get_logger("travelpayouts")
 
@@ -81,6 +82,7 @@ class TravelpayoutsFlightProvider:
                 cabin="Economy",
                 price_amount=price,
                 price_currency=(o.get("currency") or currency).upper(),
+                booking_url=aviasales_from_link(o.get("link", "")),
             ))
         offers.sort(key=lambda x: x.price_amount)
         return offers

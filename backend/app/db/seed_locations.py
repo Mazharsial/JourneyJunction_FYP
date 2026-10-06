@@ -68,6 +68,107 @@ VISA_RULES = [
     ("SA", "PK", "visa_required", 30, "Apply for a Pakistan visa before travelling."),
 ]
 
+# ---------------------------------------------------------------------------
+# Step-by-step preparation guides (from Pakistan). Each step:
+# {title, detail, url (official source), fee, timeline}. Fees/timelines are
+# indicative demo values — always verify with the linked official source.
+# ---------------------------------------------------------------------------
+_PREP_AE_TOURISM = [
+    {"title": "1. Get / renew your passport",
+     "detail": "Make sure your machine-readable or e-passport is valid for at least 6 months beyond your travel dates. Apply or renew at a DGIP Passport office.",
+     "url": "https://dgip.gov.pk", "fee": "PKR 4,500–27,500 (normal to urgent)", "timeline": "7–21 working days"},
+    {"title": "2. Prepare photographs & documents",
+     "detail": "Arrange 2 recent passport-size photos (white background), a copy of your CNIC, and your passport's first page.",
+     "url": "", "fee": "PKR 500–1,500", "timeline": "Same day"},
+    {"title": "3. Attest documents (only if required)",
+     "detail": "Tourism usually needs no attestation. If you carry educational/employment documents (e.g. for a longer stay), get them attested by IBCC/HEC, then MOFA Pakistan, then the UAE Embassy.",
+     "url": "https://mofa.gov.pk", "fee": "PKR 500–2,000 per document", "timeline": "2–7 working days"},
+    {"title": "4. Apply for the UAE tourist visa",
+     "detail": "Apply through an airline (Emirates/Etihad/flydubai), a licensed travel agent, or the UAE ICP / GDRFA portal. Choose 30-day or 60-day tourist visa. You'll need your passport scan, photo, ticket and hotel booking.",
+     "url": "https://icp.gov.ae", "fee": "AED 350–700 (≈ PKR 27,000–54,000)", "timeline": "3–5 working days"},
+    {"title": "5. Book flights & hotel",
+     "detail": "Book a confirmed return/onward ticket and accommodation (required for the visa). Use the Book links on this page to compare and reserve.",
+     "url": "", "fee": "Varies", "timeline": "Same day"},
+    {"title": "6. Travel insurance & proof of funds",
+     "detail": "Arrange travel/health insurance (recommended) and keep a recent bank statement as proof of sufficient funds.",
+     "url": "", "fee": "PKR 2,000–6,000", "timeline": "1–2 days"},
+    {"title": "7. Final checks before you fly",
+     "detail": "Carry printed visa, ticket, hotel booking and insurance. Confirm your passport, visa and vaccination (if any) are in order.",
+     "url": "https://u.ae/en/information-and-services/visa-and-emirates-id", "fee": "—", "timeline": "Before departure"},
+]
+
+_PREP_SA_UMRAH = [
+    {"title": "1. Valid passport",
+     "detail": "Ensure your passport is valid for at least 6 months beyond your travel dates; renew at DGIP if needed.",
+     "url": "https://dgip.gov.pk", "fee": "PKR 4,500–27,500", "timeline": "7–21 working days"},
+    {"title": "2. Mandatory vaccinations",
+     "detail": "Get the meningococcal (ACWY) vaccine — MANDATORY, certificate issued at least 10 days before arrival — and a polio (OPV) dose, required for travellers from Pakistan. Vaccinate at an authorized government centre.",
+     "url": "https://www.nhsrc.gov.pk", "fee": "PKR 2,500–6,000", "timeline": "Certificate valid 10 days+ before travel"},
+    {"title": "3. Photographs & documents",
+     "detail": "Arrange recent white-background photos, CNIC copy, and (for women) mahram/relationship documents if applicable. Women may travel without a mahram under current rules — verify first.",
+     "url": "", "fee": "PKR 500–1,500", "timeline": "Same day"},
+    {"title": "4. Apply for the Umrah visa (Nusuk)",
+     "detail": "Apply through the Nusuk platform/app or an approved Umrah operator. You'll choose a package (visa + hotel + sometimes transport) and upload your passport and photo.",
+     "url": "https://www.nusuk.sa", "fee": "SAR 300+ (visa) + package", "timeline": "3–7 working days"},
+    {"title": "5. Book flights & Makkah/Madinah hotels",
+     "detail": "Confirm return flights and hotels close to the Haram (often part of the Nusuk package). Use the Book links on this page to compare.",
+     "url": "", "fee": "Varies by package", "timeline": "Same day"},
+    {"title": "6. Nusuk permits (Rawdah & prayers)",
+     "detail": "Use the Nusuk app to book your Umrah permit and Rawdah/prayer slots after your visa is issued.",
+     "url": "https://www.nusuk.sa", "fee": "Free", "timeline": "After visa issuance"},
+    {"title": "7. Pack Ihram & final checks",
+     "detail": "Carry Ihram clothing, your vaccination certificates, visa, ticket and hotel confirmation. Keep the Nusuk app installed.",
+     "url": "", "fee": "—", "timeline": "Before departure"},
+]
+
+_PREP_SA_HAJJ = [
+    {"title": "1. Valid passport",
+     "detail": "Passport valid for at least 6 months beyond travel. Renew at DGIP if required.",
+     "url": "https://dgip.gov.pk", "fee": "PKR 4,500–27,500", "timeline": "7–21 working days"},
+    {"title": "2. Register for Hajj",
+     "detail": "Register under the Government Hajj Scheme via the Ministry of Religious Affairs (Pakistan), or book through an approved private Hajj operator / Nusuk Hajj. A tourist or Umrah visa is NOT valid for Hajj.",
+     "url": "https://www.mora.gov.pk", "fee": "Scheme/package dependent", "timeline": "Seasonal — apply early"},
+    {"title": "3. Mandatory vaccinations",
+     "detail": "Meningococcal (ACWY) is mandatory; polio (OPV) is required for Pakistan travellers. Seasonal influenza and COVID-19 are strongly recommended.",
+     "url": "https://www.nhsrc.gov.pk", "fee": "PKR 2,500–6,000", "timeline": "10+ days before travel"},
+    {"title": "4. Hajj visa & package",
+     "detail": "Your Hajj visa is issued through your operator or the Nusuk Hajj platform along with a confirmed package covering Makkah, Mina, Arafat and Muzdalifah.",
+     "url": "https://www.nusuk.sa", "fee": "Included in package", "timeline": "Before the Hajj window"},
+    {"title": "5. Mahram documents (for women)",
+     "detail": "Prepare relationship/mahram documents if applicable per your operator's and the current Saudi rules.",
+     "url": "", "fee": "—", "timeline": "With application"},
+    {"title": "6. Hajj orientation & packing",
+     "detail": "Attend your operator's Hajj training, pack Ihram, carry all certificates, your visa, wristband/ID and medication.",
+     "url": "", "fee": "—", "timeline": "Before departure"},
+]
+
+_PREP_SA_TOURISM = [
+    {"title": "1. Valid passport",
+     "detail": "Passport valid for at least 6 months beyond travel.",
+     "url": "https://dgip.gov.pk", "fee": "PKR 4,500–27,500", "timeline": "7–21 working days"},
+    {"title": "2. Apply for the Saudi tourist eVisa",
+     "detail": "Apply online via Visit Saudi / the Saudi MOFA eVisa portal. The eVisa usually includes mandatory travel insurance.",
+     "url": "https://visa.visitsaudi.com", "fee": "≈ SAR 300–480 (incl. insurance)", "timeline": "Instant to a few days"},
+    {"title": "3. Book flights & hotel",
+     "detail": "Confirm your flights and accommodation. Use the Book links on this page to compare options.",
+     "url": "", "fee": "Varies", "timeline": "Same day"},
+    {"title": "4. Final checks",
+     "detail": "Carry your eVisa, ticket and hotel booking. Respect local dress and conduct rules.",
+     "url": "https://www.visitsaudi.com", "fee": "—", "timeline": "Before departure"},
+]
+
+_PREP_PK = [
+    {"title": "1. Valid passport",
+     "detail": "Ensure your passport is valid for at least 6 months beyond travel.",
+     "url": "", "fee": "Varies by country", "timeline": "Varies"},
+    {"title": "2. Apply for a Pakistan visa / NICOP",
+     "detail": "Apply for the appropriate visa through the NADRA online visa portal, or carry your NICOP/POC if eligible.",
+     "url": "https://visa.nadra.gov.pk", "fee": "USD 8–60 (visa dependent)", "timeline": "3–7 working days"},
+    {"title": "3. Book flights & accommodation",
+     "detail": "Confirm your flights and accommodation / host details. Use the Book links on this page.",
+     "url": "", "fee": "Varies", "timeline": "Same day"},
+]
+
 # Destination entry / travel requirements (informational, demo data).
 # Keyed by (destination ISO2, purpose). purpose defaults to "tourism"; Saudi
 # Arabia also carries "umrah" and "hajj" variants with pilgrimage-specific
@@ -77,6 +178,7 @@ COUNTRY_REQUIREMENTS = [
     {
         "destination_iso2": "AE",
         "purpose": "tourism",
+        "preparation": _PREP_AE_TOURISM,
         "passport_validity_months": 6,
         "required_documents": [
             "Passport valid for at least 6 months beyond arrival",
@@ -107,6 +209,7 @@ COUNTRY_REQUIREMENTS = [
     {
         "destination_iso2": "PK",
         "purpose": "tourism",
+        "preparation": _PREP_PK,
         "passport_validity_months": 6,
         "required_documents": [
             "Passport valid for at least 6 months beyond arrival",
@@ -137,6 +240,7 @@ COUNTRY_REQUIREMENTS = [
     {
         "destination_iso2": "SA",
         "purpose": "tourism",
+        "preparation": _PREP_SA_TOURISM,
         "passport_validity_months": 6,
         "required_documents": [
             "Passport valid for at least 6 months beyond arrival",
@@ -168,6 +272,7 @@ COUNTRY_REQUIREMENTS = [
     {
         "destination_iso2": "SA",
         "purpose": "umrah",
+        "preparation": _PREP_SA_UMRAH,
         "passport_validity_months": 6,
         "required_documents": [
             "Passport valid for at least 6 months beyond arrival",
@@ -203,6 +308,7 @@ COUNTRY_REQUIREMENTS = [
     {
         "destination_iso2": "SA",
         "purpose": "hajj",
+        "preparation": _PREP_SA_HAJJ,
         "passport_validity_months": 6,
         "required_documents": [
             "Passport valid for at least 6 months beyond arrival",

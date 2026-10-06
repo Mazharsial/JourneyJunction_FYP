@@ -121,6 +121,11 @@ async def test_create_list_and_detail_trip(client):
     assert len(d["suggested_flights"]) >= 1
     assert len(d["suggested_hotels"]) >= 1
     assert d["visa"]["requirement"] == "visa_required"  # PK -> AE
+    # Every offer carries an authentic booking/verify link.
+    assert d["suggested_flights"][0]["booking_url"].startswith("http")
+    assert d["suggested_hotels"][0]["booking_url"].startswith("http")
+    # Destination carries a step-by-step preparation guide.
+    assert len(d["requirements"]["preparation"]) >= 3
 
 
 async def test_trip_detail_includes_travel_requirements(client):
@@ -180,6 +185,11 @@ async def test_umrah_trip_has_pilgrimage_requirements(client):
     assert any("meningococcal" in h.lower() for h in req["health"])
     labels = " ".join(x["label"].lower() for x in req["required_documents"])
     assert "nusuk" in labels or "umrah visa" in labels
+    # Umrah preparation guide includes the mandatory-vaccination step with a link.
+    prep = req["preparation"]
+    assert len(prep) >= 5
+    assert any("vaccinat" in s["title"].lower() or "vaccinat" in s["detail"].lower() for s in prep)
+    assert any(s["url"].startswith("http") for s in prep)
 
 
 async def test_pilgrimage_requires_saudi_destination(client):

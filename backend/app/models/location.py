@@ -76,6 +76,9 @@ class CountryRequirement(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     # list[str] — each entry is a required document the traveller must carry
     required_documents: Mapped[list] = mapped_column(JSON, default=list)
     health: Mapped[list] = mapped_column(JSON, default=list)        # list[str]
+    # Ordered step-by-step preparation guide: list of
+    # {title, detail, url?, fee?, timeline?}
+    preparation: Mapped[list] = mapped_column(JSON, default=list)
     currency_notes: Mapped[str] = mapped_column(String(400), default="")
     customs_notes: Mapped[str] = mapped_column(String(400), default="")
     entry_notes: Mapped[str] = mapped_column(String(400), default="")

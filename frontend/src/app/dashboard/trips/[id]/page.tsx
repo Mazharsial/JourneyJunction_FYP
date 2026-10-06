@@ -35,9 +35,17 @@ function FlightCard({ f }: { f: FlightOffer }) {
         {f.origin_iata} {time(f.depart_time)} → {f.destination_iata} {time(f.arrive_time)} · {dur(f.duration_minutes)} ·{" "}
         {f.stops === 0 ? "Non-stop" : `${f.stops} stop`}
       </p>
-      <span className="mt-2 inline-block rounded-full bg-surface-muted px-2 py-0.5 text-[11px] text-muted">
-        {f.cabin} · {f.flight_number}
-      </span>
+      <div className="mt-2 flex items-center justify-between">
+        <span className="inline-block rounded-full bg-surface-muted px-2 py-0.5 text-[11px] text-muted">
+          {f.cabin} · {f.flight_number}
+        </span>
+        {f.booking_url && (
+          <a href={f.booking_url} target="_blank" rel="noopener noreferrer"
+             className="text-xs font-semibold text-brand-blue hover:underline">
+            Book / verify →
+          </a>
+        )}
+      </div>
     </div>
   );
 }
@@ -59,6 +67,12 @@ function HotelCard({ h }: { h: HotelOffer }) {
           <span key={a} className="rounded-full bg-surface-muted px-2 py-0.5 text-[10px] text-muted">{a}</span>
         ))}
       </div>
+      {h.booking_url && (
+        <a href={h.booking_url} target="_blank" rel="noopener noreferrer"
+           className="mt-2 inline-block text-xs font-semibold text-brand-blue hover:underline">
+          Book / verify →
+        </a>
+      )}
     </div>
   );
 }
@@ -156,7 +170,43 @@ function RequirementsSection({ req }: { req: TravelRequirements }) {
         {req.emergency_number && <InfoBlock title="Emergency numbers">{req.emergency_number}</InfoBlock>}
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+      {req.preparation.length > 0 && (
+        <div className="mt-6">
+          <h3 className="text-base font-semibold text-foreground">How to prepare — step by step</h3>
+          <p className="mt-1 text-xs text-muted">
+            From documents to visa to departure. Fees and timelines are indicative — verify at the official links.
+          </p>
+          <ol className="mt-4 space-y-3">
+            {req.preparation.map((s, i) => (
+              <li key={i} className="relative rounded-xl border border-border bg-surface p-4 pl-5">
+                <span className="absolute left-0 top-0 h-full w-1 rounded-l-xl brand-gradient" aria-hidden />
+                <p className="text-sm font-semibold text-foreground">{s.title}</p>
+                {s.detail && <p className="mt-1 text-sm text-muted">{s.detail}</p>}
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  {s.fee && (
+                    <span className="rounded-full bg-surface-muted px-2.5 py-0.5 text-xs text-muted">
+                      💳 {s.fee}
+                    </span>
+                  )}
+                  {s.timeline && (
+                    <span className="rounded-full bg-surface-muted px-2.5 py-0.5 text-xs text-muted">
+                      ⏱ {s.timeline}
+                    </span>
+                  )}
+                  {s.url && (
+                    <a href={s.url} target="_blank" rel="noopener noreferrer"
+                       className="ml-auto text-xs font-semibold text-brand-blue hover:underline">
+                      Official info →
+                    </a>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-2">
         {req.official_source && (
           <a href={req.official_source} target="_blank" rel="noopener noreferrer"
              className="text-sm font-medium text-brand-blue hover:underline">

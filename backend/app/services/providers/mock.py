@@ -11,6 +11,7 @@ import random
 from datetime import date, datetime, timedelta
 
 from app.schemas.travel import FlightOffer, HotelOffer
+from app.services.providers.booking_links import aviasales_search_url, hotel_booking_url
 
 _AIRLINES = [
     ("Emirates", "EK"),
@@ -59,6 +60,7 @@ class MockFlightProvider:
                 depart_time=dep.isoformat(), arrive_time=arr.isoformat(),
                 duration_minutes=dur + stops * 90, stops=stops, cabin=cabin,
                 price_amount=price, price_currency=currency,
+                booking_url=aviasales_search_url(origin_iata, destination_iata, depart_date, travelers),
             ))
         offers.sort(key=lambda o: o.price_amount)
         return offers
@@ -83,6 +85,7 @@ class MockHotelProvider:
                 address=f"{rng.randint(1, 200)} Main Road, {city_name}",
                 amenities=amenities, nights=nights, price_per_night=nightly,
                 total_amount=round(nightly * nights, 2), price_currency=currency,
+                booking_url=hotel_booking_url(f"{name} {city_name}", city_name),
             ))
         offers.sort(key=lambda o: o.price_per_night)
         return offers

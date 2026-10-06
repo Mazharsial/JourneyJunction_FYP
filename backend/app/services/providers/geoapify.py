@@ -19,6 +19,7 @@ import httpx
 from app.core.config import get_settings
 from app.core.logging import get_logger
 from app.schemas.travel import HotelOffer
+from app.services.providers.booking_links import hotel_booking_url
 
 logger = get_logger("geoapify")
 
@@ -106,6 +107,7 @@ class GeoapifyHotelProvider:
                 price_per_night=nightly,
                 total_amount=round(nightly * nights, 2),
                 price_currency=currency.upper(),
+                booking_url=hotel_booking_url(name, city_name),
             ))
             if len(offers) >= 8:
                 break

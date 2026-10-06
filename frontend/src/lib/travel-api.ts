@@ -27,6 +27,7 @@ export interface FlightOffer {
   cabin: string;
   price_amount: number;
   price_currency: string;
+  booking_url: string;
 }
 export interface HotelOffer {
   provider: string;
@@ -38,6 +39,7 @@ export interface HotelOffer {
   price_per_night: number;
   total_amount: number;
   price_currency: string;
+  booking_url: string;
 }
 export interface CityRef {
   id: string;
@@ -75,11 +77,19 @@ export interface RequiredDocument {
   doc_type: string | null;
   status: "verified" | "not_verified" | "informational";
 }
+export interface PreparationStep {
+  title: string;
+  detail: string;
+  url: string;
+  fee: string;
+  timeline: string;
+}
 export interface TravelRequirements {
   destination_country: string;
   destination_iso2: string;
   purpose: string;
   passport_validity_months: number;
+  preparation: PreparationStep[];
   visa: VisaInfo | null;
   required_documents: RequiredDocument[];
   documents_ready: number;
