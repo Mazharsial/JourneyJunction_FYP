@@ -1,8 +1,9 @@
 """
 Travel provider factory.
 
-Returns the Amadeus-backed provider when credentials are configured, otherwise
-a deterministic mock provider so the app is fully functional without API keys.
+Prefers Travelpayouts (free: Aviasales flights + Hotellook hotels) when a token
+is configured, then Amadeus if its credentials are set, otherwise a
+deterministic mock so the app is fully functional without any API keys.
 """
 from __future__ import annotations
 
@@ -11,12 +12,20 @@ from app.services.providers.base import FlightProvider, HotelProvider
 from app.services.providers.mock import MockFlightProvider, MockHotelProvider
 
 
+def _travelpayouts_configured() -> bool:
+    return bool(get_settings().travelpayouts_token)
+
+
 def _amadeus_configured() -> bool:
     s = get_settings()
     return bool(s.amadeus_client_id and s.amadeus_client_secret)
 
 
 def get_flight_provider() -> FlightProvider:
+    if _travelpayouts_configured():
+        from app.services.providers.travelpayouts import TravelpayoutsFlightProvider
+
+        return TravelpayoutsFlightProvider()
     if _amadeus_configured():
         from app.services.providers.amadeus import AmadeusFlightProvider
 
@@ -25,6 +34,10 @@ def get_flight_provider() -> FlightProvider:
 
 
 def get_hotel_provider() -> HotelProvider:
+    # NOTE: Travelpayouts/Hotellook's free cached hotel-price endpoint was
+    # retired (the current Hotellook search is an async, signature-signed flow),
+    # and Amadeus self-service is gone too — so hotels use the realistic mock.
+    # TravelpayoutsHotelProvider is kept for when a working endpoint is wired.
     if _amadeus_configured():
         from app.services.providers.amadeus import AmadeusHotelProvider
 
@@ -33,4 +46,8 @@ def get_hotel_provider() -> HotelProvider:
 
 
 def active_provider_name() -> str:
-    return "amadeus" if _amadeus_configured() else "mock"
+    if _travelpayouts_configured():
+        return "travelpayouts"
+    if _amadeus_configured():
+        return "amadeus"
+    return "mock"

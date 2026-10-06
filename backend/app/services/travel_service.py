@@ -46,35 +46,43 @@ async def _currency_for_city(session: AsyncSession, city: City) -> str:
 async def search_flights(*, origin_iata, destination_iata, depart_date, budget_tier,
                          travelers, currency) -> list[FlightOffer]:
     provider = get_flight_provider()
+    offers: list[FlightOffer] = []
     try:
-        return await provider.search_flights(
+        offers = await provider.search_flights(
             origin_iata=origin_iata, destination_iata=destination_iata,
             depart_date=depart_date, budget_tier=budget_tier, travelers=travelers,
             currency=currency,
         )
     except Exception as exc:  # live provider failure -> graceful mock fallback
         logger.warning("flight_provider_fallback", provider=provider.name, error=str(exc))
-        return await MockFlightProvider().search_flights(
+    # Live providers (e.g. cached Travelpayouts fares) can legitimately return
+    # nothing for a route/date — fall back to the mock so the UI always has data.
+    if not offers and provider.name != "mock":
+        offers = await MockFlightProvider().search_flights(
             origin_iata=origin_iata, destination_iata=destination_iata,
             depart_date=depart_date, budget_tier=budget_tier, travelers=travelers,
             currency=currency,
         )
+    return offers
 
 
 async def search_hotels(*, city_name, city_iata, checkin, checkout, budget_tier,
                         travelers, currency) -> list[HotelOffer]:
     provider = get_hotel_provider()
+    offers: list[HotelOffer] = []
     try:
-        return await provider.search_hotels(
+        offers = await provider.search_hotels(
             city_name=city_name, city_iata=city_iata, checkin=checkin, checkout=checkout,
             budget_tier=budget_tier, travelers=travelers, currency=currency,
         )
     except Exception as exc:
         logger.warning("hotel_provider_fallback", provider=provider.name, error=str(exc))
-        return await MockHotelProvider().search_hotels(
+    if not offers and provider.name != "mock":
+        offers = await MockHotelProvider().search_hotels(
             city_name=city_name, city_iata=city_iata, checkin=checkin, checkout=checkout,
             budget_tier=budget_tier, travelers=travelers, currency=currency,
         )
+    return offers
 
 
 # ---- trips ----
