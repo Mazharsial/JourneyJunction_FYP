@@ -27,9 +27,9 @@ function dur(mins: number) {
 function FlightCard({ f }: { f: FlightOffer }) {
   return (
     <div className="rounded-xl border border-border bg-surface p-4">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-foreground">{f.airline}</span>
-        <span className="text-sm font-bold text-brand-blue">{money(f.price_amount, f.price_currency)}</span>
+      <div className="flex items-center justify-between gap-2">
+        <span className="min-w-0 truncate text-sm font-semibold text-foreground">{f.airline}</span>
+        <span className="shrink-0 text-sm font-bold text-brand-blue">{money(f.price_amount, f.price_currency)}</span>
       </div>
       <p className="mt-1 text-xs text-muted">
         {f.origin_iata} {time(f.depart_time)} → {f.destination_iata} {time(f.arrive_time)} · {dur(f.duration_minutes)} ·{" "}
@@ -53,11 +53,11 @@ function FlightCard({ f }: { f: FlightOffer }) {
 function HotelCard({ h }: { h: HotelOffer }) {
   return (
     <div className="rounded-xl border border-border bg-surface p-4">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-foreground">{h.name}</span>
-        <span className="text-xs font-medium text-warning">★ {h.rating.toFixed(1)}</span>
+      <div className="flex items-start justify-between gap-2">
+        <span className="min-w-0 break-words text-sm font-semibold text-foreground">{h.name}</span>
+        <span className="shrink-0 text-xs font-medium text-warning">★ {h.rating.toFixed(1)}</span>
       </div>
-      <p className="mt-1 text-xs text-muted">{h.address}</p>
+      <p className="mt-1 break-words text-xs text-muted">{h.address}</p>
       <p className="mt-2 text-sm font-bold text-brand-blue">
         {money(h.price_per_night, h.price_currency)}
         <span className="text-xs font-normal text-muted"> / night · {money(h.total_amount, h.price_currency)} total</span>
@@ -120,7 +120,7 @@ function RequirementsSection({ req }: { req: TravelRequirements }) {
         </div>
       )}
 
-      <div className="mt-4 grid gap-4 md:grid-cols-2">
+      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         <InfoBlock title="Required documents">
           <ul className="space-y-2">
             {req.required_documents.map((doc, i) => {
@@ -176,7 +176,7 @@ function RequirementsSection({ req }: { req: TravelRequirements }) {
           <p className="mt-1 text-xs text-muted">
             Available visa options for this destination. Fees are indicative — confirm at the official link below.
           </p>
-          <div className="mt-4 grid gap-3 md:grid-cols-2">
+          <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
             {req.visa_types.map((v, i) => (
               <div key={i} className="rounded-xl border border-border bg-surface p-4">
                 <div className="flex items-start justify-between gap-2">
@@ -328,7 +328,7 @@ export default function TripDetailPage() {
       {suggested_flights.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold text-foreground">Suggested flights</h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {suggested_flights.map((f, i) => <FlightCard key={i} f={f} />)}
           </div>
         </section>
@@ -341,7 +341,7 @@ export default function TripDetailPage() {
             Hotel names and locations are live; prices and ratings are estimates.
           </p>
         )}
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {suggested_hotels.map((h, i) => <HotelCard key={i} h={h} />)}
         </div>
       </section>

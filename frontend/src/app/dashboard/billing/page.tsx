@@ -83,7 +83,7 @@ function BillingInner() {
       {sub && sub.usage.length > 0 && (
         <section className="rounded-2xl border border-border bg-surface p-5">
           <h2 className="text-sm font-semibold text-foreground">This month&apos;s usage</h2>
-          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {sub.usage
               .filter((u) => u.limit !== -1 && u.limit !== 0)
               .map((u) => (
@@ -109,7 +109,7 @@ function BillingInner() {
       {!data ? (
         <p className="text-sm text-muted">Loading plans…</p>
       ) : (
-        <div className="grid gap-5 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
           {data.plans.map((p) => {
             const current = sub?.plan_code === p.code;
             return (

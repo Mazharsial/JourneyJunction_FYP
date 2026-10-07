@@ -25,7 +25,7 @@ export default function Home() {
             <h2 className="text-center text-3xl font-bold tracking-tight text-foreground md:text-4xl">
               How {brand.name} works
             </h2>
-            <div className="mt-14 grid gap-8 md:grid-cols-3">
+            <div className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3">
               {steps.map((s) => (
                 <div key={s.n} className="text-center">
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full brand-gradient text-lg font-bold text-white">

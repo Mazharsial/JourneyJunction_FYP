@@ -138,11 +138,11 @@ export default function PlanTripPage() {
           value={origin}
           onChange={(e) => setOrigin(e.target.value)}
         />
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Input label="Start date" type="date" value={start} onChange={(e) => setStart(e.target.value)} required />
           <Input label="End date" type="date" value={end} onChange={(e) => setEnd(e.target.value)} required />
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Select
             label="Budget"
             options={[

@@ -87,7 +87,7 @@ export default function AdminPage() {
       {error && <Alert tone="error">{error}</Alert>}
 
       {stats && (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <StatCard label="Users" value={stats.users_total} />
           <StatCard label="Active users" value={stats.users_active} />
           <StatCard label="Trips" value={stats.trips_total} />

@@ -30,7 +30,7 @@ export function PricingSection() {
       {!plans ? (
         <p className="mt-10 text-center text-sm text-muted">Loading plans…</p>
       ) : (
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
           {plans.map((p) => (
             <div
               key={p.code}

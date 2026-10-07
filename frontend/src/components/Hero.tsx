@@ -24,9 +24,9 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.06] brand-gradient" />
-      <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:py-16 md:py-24 lg:grid-cols-2">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 py-12 sm:py-16 md:py-24 lg:grid-cols-2">
         {/* left */}
-        <div>
+        <div className="min-w-0">
           <motion.span
             custom={0}
             variants={fade}
@@ -104,6 +104,7 @@ export function Hero() {
           initial={{ opacity: 0, scale: 0.96, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ delay: 0.25, duration: 0.6, ease: "easeOut" }}
+          className="min-w-0"
         >
           <HeroDemo />
         </motion.div>

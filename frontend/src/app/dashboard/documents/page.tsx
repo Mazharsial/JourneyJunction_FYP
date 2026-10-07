@@ -162,7 +162,7 @@ export default function DocumentsPage() {
 
       <form onSubmit={onUpload} className="space-y-4 rounded-2xl border border-border bg-surface p-6">
         {error && <Alert tone="error">{error}</Alert>}
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Select
             label="Document type"
             value={docType}

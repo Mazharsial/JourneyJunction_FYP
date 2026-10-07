@@ -100,7 +100,7 @@ export default function DashboardHome() {
 
       <div>
         <h2 className="text-lg font-semibold text-foreground">What would you like to do?</h2>
-        <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {tiles.map((t, i) => (
             <motion.div
               key={t.title}

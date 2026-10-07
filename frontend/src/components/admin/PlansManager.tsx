@@ -82,7 +82,7 @@ export function PlansManager() {
         Monthly limits are enforced server-side. Blank = unlimited · 0 = disabled · N = cap / month.
       </p>
       {error && <div className="mt-3"><Alert tone="error">{error}</Alert></div>}
-      <div className="mt-4 grid gap-4 lg:grid-cols-3">
+      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
         {plans.map((p) => (
           <div key={p.code} className="rounded-2xl border border-border bg-surface p-5">
             <div className="flex items-baseline justify-between">
