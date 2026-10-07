@@ -66,9 +66,11 @@ services:
     command: celery -A app.worker.celery_app.celery_app worker --loglevel=info
 
   frontend:
-    build: ./frontend
-    environment:
-      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000/api/v1
+    build:
+      context: ./frontend
+      args:
+        # NEXT_PUBLIC_* is baked at build time; the browser calls the backend here.
+        NEXT_PUBLIC_API_BASE_URL: http://localhost:8000/api/v1
     depends_on:
       - backend
     ports:

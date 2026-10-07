@@ -9,9 +9,13 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# NEXT_PUBLIC_* must be baked at BUILD time (they are embedded in the client
+# bundle), so the browser calls the backend directly at this URL. Override via
+# a build arg if the backend is elsewhere.
+ARG NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api/v1
 # NEXT_STANDALONE enables `output: "standalone"` (see next.config.ts) for the
 # container runtime; local `next start` leaves it off so rewrites() still apply.
-ENV NEXT_TELEMETRY_DISABLED=1 NEXT_STANDALONE=1
+ENV NEXT_TELEMETRY_DISABLED=1 NEXT_STANDALONE=1 NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
 RUN npm run build
 
 # ---- Stage 3: runtime ----

@@ -43,15 +43,26 @@ PROJECT_CONTEXT.md   Living single-source-of-truth for continuity/recovery
 Open the folder in **VS Code** or **Kiro**, then use its integrated terminal. The app runs fully
 on **mock data** with no API keys — add keys to `.env` later to switch any service to live.
 
-### Option A — Docker (easiest, one command)
-Requires Docker Desktop (`winget install -e --id Docker.DockerDesktop`, then reboot).
-```bash
-cp .env.example .env          # Windows PowerShell: copy .env.example .env
-docker compose up --build
-# Frontend → http://localhost:3000    API docs → http://localhost:8000/docs
-```
-Compose starts PostgreSQL + Redis, runs the migrations and seed automatically, then the API,
-worker and frontend. Stop with `Ctrl+C`; wipe the DB with `docker compose down -v`.
+### Option A — Docker (recommended: one command) ⭐
+Requires Docker Desktop (with the WSL 2 backend on Windows). That's the only prerequisite —
+no Python, Node, or database to install.
+
+1. Open the project folder in **VS Code** or **Kiro**.
+2. Make sure `.env` exists (first time only): in the terminal run `copy .env.example .env`.
+3. Start everything — pick either:
+   - **One click:** `Terminal → Run Task… → Run app (Docker)` (or press `Ctrl+Shift+B`), **or**
+   - **One command** in the terminal:
+     ```bash
+     docker compose up --build
+     ```
+
+Then open **http://localhost:3000** (API docs at **http://localhost:8000/docs**). Sign in with the
+seeded super admin **`admin@journeyjunction.app` / `Admin@12345`**, or register a new account.
+
+Compose starts PostgreSQL + Redis, runs the migrations and seed automatically, then the API, worker
+and frontend — all live-reload on code changes. Stop with `Ctrl+C` (or the **Stop app** task).
+Wipe the database for a fresh start with the **Reset database** task (`docker compose down -v`).
+The app runs on mock data by default; add keys to `.env` to make any service live.
 
 ### Option B — Manual, no Docker (SQLite, two terminals)
 No PostgreSQL needed — it uses a local SQLite file.
