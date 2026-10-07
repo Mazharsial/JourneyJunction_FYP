@@ -24,7 +24,7 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.06] brand-gradient" />
-      <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 md:py-24 lg:grid-cols-2">
+      <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:py-16 md:py-24 lg:grid-cols-2">
         {/* left */}
         <div>
           <motion.span
@@ -43,7 +43,7 @@ export function Hero() {
             variants={fade}
             initial="hidden"
             animate="show"
-            className="mt-5 max-w-xl text-4xl font-bold leading-[1.1] tracking-tight text-foreground md:text-6xl"
+            className="mt-5 max-w-xl text-3xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-6xl"
           >
             Your AI Travel Agent for{" "}
             <span className="brand-text-gradient">Dubai, Umrah & Hajj</span>
